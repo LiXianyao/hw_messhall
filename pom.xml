@@ -57,7 +57,7 @@
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.6</version>
-                <executions>
+                <!--<executions>
                     <execution>
                         <id>install node and npm</id>
                         <goals>
@@ -91,7 +91,7 @@
                 <configuration>
                     <installDirectory>target</installDirectory>
                     <workingDirectory>frontend</workingDirectory>
-                </configuration>
+                </configuration>-->
             </plugin>
         </plugins>
     </build>
