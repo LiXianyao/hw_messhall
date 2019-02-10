@@ -1,0 +1,10 @@
+@import '~antd/dist/antd.css';
+
+.register-form {
+    max-width: 300px;
+    max-height: 600px;
+}
+
+.register-form-button {
+    width: 100%;
+}
