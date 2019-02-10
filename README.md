@@ -1,10 +1,11 @@
 开发说明
 1、frontend/ ————react项目
     每次编写完成后，npm run build，得到frontend/build/文件夹，
-    把里面的所有内容放到messhall/src/main/resources/templates里面，使得后台可以访问到
+    把里面的所有内容放到messhall/src/main/resources/templates里面，使得后台可以访问到    
 2、src/main/java——spring boot 写的后台程序
 
 如何运行:
+
 根目录打命令 
 mvn install 编译
 mvn spring-boot:run 跑起后台程序
