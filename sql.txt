@@ -1,0 +1,43 @@
+CREATE DATABASE IF NOT EXISTS messHall  DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+create table tblUser
+(
+	userId VARCHAR(100) not null,
+	userName varchar(100) not null,
+	userPass varchar(100) not null,
+	userPhone varchar(100) not null,
+	userAge int null,
+	userGender int default 0 null comment '0为未填写，1为男，2为女',
+	userType int default 0 null comment '0为admin，1为business，2为customer',
+	constraint tblUser_pk
+		primary key (userId)
+)
+
+create table tblFood
+(
+	foodId varchar(100) not null,
+	foodName varchar(100) not null,
+	foodPrice DECIMAL(6,2) not null,
+	foodImage varchar(100) null,
+	userId varchar(100) not null comment '餐品所属商家',
+	constraint tblFood_pk
+		primary key (foodId)
+)
+comment '餐品信息表';
+
+create table tblCart
+(
+	userId varchar(100) not null,
+	foodId varchar(100) not null,
+	updateTime datetime default CURRENT_TIMESTAMP not null,
+	foodNum int default 1 not null,
+	cartPaied int default 0 not null,
+	constraint tblCart_pk
+		primary key (userId, foodId, updateTime)
+)
+comment '购物车信息表';
+
+
+
+
+comment '用户信息表';
+
