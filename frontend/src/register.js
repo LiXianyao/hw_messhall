@@ -16,7 +16,7 @@ class NormalRegisterForm extends React.Component {
                 let initHeaders = new Headers();
                 initHeaders.append('Accept', 'application/json, text/plain, */*');
                 initHeaders.append('Cache-Control', 'no-cache');
-                initHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+                initHeaders.append('Content-Type', 'application/x-www-form-urlencoded,application/json;charset=utf-8');
 
                 let formData = new URLSearchParams();
                 formData.append('userName', values.userName);
@@ -29,18 +29,19 @@ class NormalRegisterForm extends React.Component {
 
                 const init = {
                     method: 'POST',
+                    mode: "no-cors",
                     credentials: 'include', // cookies
                     headers: initHeaders,
                     body
                 }
 
                 fetch(
-                    'https//localhost:5000',
+                    'http://localhost:8080/register',
                     init
                 )
                     .then(res => res.json())
                     .then(data => {
-
+                        console.log(data)
                     })
                     .catch(e => console.log('错误:', e))
             }

@@ -27,3 +27,5 @@
 .mvn/
 ./frontend/build
 src/test/
+src/main/resources
+doc/
