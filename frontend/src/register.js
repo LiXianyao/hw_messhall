@@ -16,20 +16,20 @@ class NormalRegisterForm extends React.Component {
                 let initHeaders = new Headers();
                 initHeaders.append('Accept', 'application/json, text/plain, */*');
                 initHeaders.append('Cache-Control', 'no-cache');
-                initHeaders.append('Content-Type', 'application/x-www-form-urlencoded,application/json;charset=utf-8');
+                initHeaders.append('Content-Type', 'application/json');
 
-                let formData = new URLSearchParams();
-                formData.append('userName', values.userName);
-                formData.append('userPass', values.userPass)
-                formData.append('userPhone', values.userPhone)
-                formData.append('userAge', values.userAge)
-                formData.append('userGender', values.userGender)
+                let formData = {};
+                formData['userName'] = values.userName;
+                formData['userPass'] = values.userPass;
+                formData['userPhone'] = values.userPhone;
+                formData['userAge'] = values.userAge;
+                formData['userGender'] = values.userGender;
                 console.log(formData);
-                let body = formData;
+                let body = JSON.stringify(formData);
+                console.log(body)
 
                 const init = {
                     method: 'POST',
-                    mode: "no-cors",
                     credentials: 'include', // cookies
                     headers: initHeaders,
                     body

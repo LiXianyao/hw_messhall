@@ -51,13 +51,14 @@ class NormalLoginForm extends React.Component {
             let initHeaders = new Headers();
             initHeaders.append('Accept', 'application/json, text/plain, */*');
             initHeaders.append('Cache-Control', 'no-cache');
-            initHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+            initHeaders.append('Content-Type', 'application/json');
 
-            let formData = new URLSearchParams();
-            formData.append('userName', this.state.username);
-            formData.append('userPass', this.state.userpass)
+            let formData = {};
+            formData['userName'] = this.state.username;
+            formData['userPass'] = this.state.userpass;
             console.log(formData);
-            let body = formData;
+            let body = JSON.stringify(formData);
+            console.log(body)
 
             const init = {
                 method: 'POST',
