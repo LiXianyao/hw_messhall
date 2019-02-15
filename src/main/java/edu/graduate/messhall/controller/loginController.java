@@ -1,6 +1,5 @@
 package edu.graduate.messhall.controller;
 
-import edu.graduate.messhall.bean.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
