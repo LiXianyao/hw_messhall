@@ -16,7 +16,6 @@ public class registerController {
     //handle the GET-/login url: return the page
     @RequestMapping(value = "/register", method = {RequestMethod.GET, RequestMethod.POST})
     public registerResponse getRegisterInfo(@RequestBody registerEntity entity){
-        log.info("注册请求：");
         String userName = entity.getUserName();
         String userPass = entity.getUserPass();
         String userPhone = entity.getUserPhone();
