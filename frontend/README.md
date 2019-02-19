@@ -1,68 +1,69 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#安装node.js
+进入node.js官方网站，下载LTS版本  
+> https://nodejs.org/zh-cn/
 
-## Available Scripts
+傻瓜式安装一直点到底就可以  
+安装完成后win+R cmd打开运行窗口
+输入
+> npm -v  
+> node -v
 
-In the project directory, you can run:
+分别查到版本号表示下载完成
+然后我们可以通过更改成淘宝源提高速度
+>npm config set registry https://registry.npm.taobao.org
 
-### `npm start`
+然后利用下面这个命令来检查更改是否成功
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+>npm config get registry
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
 
-### `npm test`
+#安装react
+> npm install -g create-react-app
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+然后验证一下是否安装成功
+>create-react-app my-app  
+>cd my-app/  
+>npm start
 
-### `npm run build`
+然后从浏览器打开
+>http://localhost:3000/
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+出现 welcome to react 界面即成功
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+#安装订餐项目依赖包
+从github上下载订餐项目后，frontend文件夹即为react工程
+进入frontend文件夹开始安装依赖包
+>cd frontend/  
+>npm init
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+一路狂按回车就可以  
+react这个命令会生成初始的package.json文件，不然的话直接安装包会报save error  
+然后用下面这个命令安装依赖包
+>npm install --save xxx
 
-### `npm run eject`
+xxx是依赖包名字  
+所需依赖包列表如下  
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
++ react-dom
++ react-scripts
++ antd
++ react-router
++ react-router-dom
++ react-html-table-to-excel
++ react-highlight-words 
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+如果之后npm start还有报错提示缺的包也用同一方法安装  
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#启动项目
+>npm start
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Compiled with warning后  
+打开浏览器访问下列网址即可看到各个界面
+>http://localhost:3000/login  
+>http://localhost:3000/food/admin/0  
+>http://localhost:3000/food/business/0
+>http://localhost:3000/food/customer/0
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+在admin business 和 customer 页面下可以感受到权限的区分  
+目前完成登录注册页面，餐品列表界面，订单列表界面，留言板界面，我的资料界面。  
+购物车界面未完成，和后端通信未完成。
