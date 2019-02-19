@@ -1,14 +1,15 @@
 import {Radio, Form, Icon, Input, Button} from 'antd';
-import {withRouter} from 'react-router'
 import React from 'react';
+import TemplatePage from './template'
 import './index.css'
 
-class NormalRegisterForm extends React.Component {
+class MyInfoForm extends React.Component {
     constructor(props) {
         super(props);
-        // ES6 类中函数必须手动绑定
+        this.userType = this.props.match.params.type
+        this.userId = this.props.match.params.id
+        this.siderValue = ["info"]
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.userType = this.props.location.state.userType
     }
 
     handleSubmit(event) {
@@ -68,27 +69,26 @@ class NormalRegisterForm extends React.Component {
             wrapperCol: { span: 16 },
         }
         return (
-            <Form layout="horizontal" onSubmit={this.handleSubmit}  className="register-form">
-                <h1>{this.userType}注册</h1>
+          <TemplatePage userType={this.userType} userId={this.userId} siderValue={this.siderValue}>
+            <Form layout="horizontal" onSubmit={this.handleSubmit}  className="info-form">
+                <h1>我的资料</h1>
+                <Form.Item label="用户类型" {...formItemLayout}>
+                    <h4>{this.userType}</h4>
+                </Form.Item>
                 <Form.Item label="用户名称" {...formItemLayout}>
                     {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: 'Please input your username!' }]
+                        rules: [{ required: true, message: 'Please input your username!' }],
+                        initialValue: "w"
                     })(
                         <Input className="username"  prefix={<Icon type="user" style={{ fontSize: 13 }} />}  placeholder="Username" />
-                    )}
-                </Form.Item>
-                <Form.Item label="用户密码" {...formItemLayout}>
-                    {getFieldDecorator('userPass', {
-                        rules: [{ required: true, message: 'Please input your password!' }]
-                    })(
-                        <Input className="userpass"  prefix={<Icon type="lock" style={{ fontSize: 13 }} />} placeholder="Password" />
                     )}
                 </Form.Item>
                 <Form.Item label="联系电话" {...formItemLayout}>
                     {getFieldDecorator('userPhone', {
                         rules: [
                             { required: true, pattern:/^1\d{10}$/, message: 'Please input your correct phone!'}
-                        ]
+                        ],
+                        initialValue: "13333333333"
                     })(
                         <Input className="userphone"  prefix={<Icon type="phone" style={{ fontSize: 13 }} />} placeholder="Telephone" />
                     )}
@@ -97,30 +97,30 @@ class NormalRegisterForm extends React.Component {
                     {getFieldDecorator('userAge', {
                         rules: [
                             { required: true, pattern:/^([1-9]|[1-9][0-9])$/, message: 'Please input your correct age!'}
-                        ]
+                        ],
+                        initialValue: "23"
                     })(
                         <Input className="userage"  prefix={<Icon type="solution" style={{ fontSize: 13 }} />} placeholder="Age" />
                     )}
                 </Form.Item>
-                <Form.Item label="用户性别" {...formItemLayout}>
+                <Form.Item label="用户性别" {...formItemLayout}> 
                     {getFieldDecorator('userGender', {
-                        rules: [
-                            { required: true, message: 'Please choose your gender!'}
-                        ]
+                        initialValue: "2"
                     })(
-                        <Radio.Group style={{width:"191px"}}>
+                        <Radio.Group>
                             <Radio.Button value="1">Male</Radio.Button>
                             <Radio.Button value="2">Female</Radio.Button>
                         </Radio.Group>
                     )}
                 </Form.Item>
-                <Form.Item >
-                    <Button type="primary" className="register-form-button">注册</Button>
+                <Form.Item>
+                    <Button type="primary" className="info-modify-button">提交修改</Button>
                 </Form.Item>
             </Form>
+          </TemplatePage>
         );
     }
 }
 
-const WrappedNormalRegisterForm = Form.create()(NormalRegisterForm);
-export default withRouter(WrappedNormalRegisterForm);
+const InfoForm = Form.create()(MyInfoForm);
+export default InfoForm 
