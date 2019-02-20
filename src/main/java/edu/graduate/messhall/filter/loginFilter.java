@@ -9,8 +9,8 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import edu.graduate.messhall.filter.commonFunction;
 
-@WebFilter(urlPatterns = "/*", filterName = "loginFilter")
-@Order(1)
+//@WebFilter(urlPatterns = "/*", filterName = "loginFilter")
+//@Order(1)
 public class loginFilter extends HttpFilter {
     private final Logger log = LoggerFactory.getLogger(loginFilter.class);
 
