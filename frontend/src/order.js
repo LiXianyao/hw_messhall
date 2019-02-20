@@ -35,7 +35,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"等待接单"
+                orderState:"等待接单",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00002",
@@ -44,7 +45,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"商家已接单"
+                orderState:"商家已接单",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00003",
@@ -53,7 +55,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"备餐完成"
+                orderState:"备餐完成",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00004",
@@ -62,7 +65,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单完成"
+                orderState:"订单完成",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00005",
@@ -71,7 +75,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单关闭"
+                orderState:"订单关闭",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00006",
@@ -80,7 +85,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"等待接单"
+                orderState:"等待接单",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00007",
@@ -89,7 +95,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"商家已接单"
+                orderState:"商家已接单",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00008",
@@ -98,7 +105,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"备餐完成"
+                orderState:"备餐完成",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"00009",
@@ -107,7 +115,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单完成"
+                orderState:"订单完成",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"000010",
@@ -116,7 +125,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单关闭"
+                orderState:"订单关闭",
+                content:"米饭*1 麻辣香锅*1"
               },
               {
                 orderId:"000011",
@@ -125,7 +135,8 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单关闭"
+                orderState:"订单关闭",
+                content:"米饭*1 麻辣香锅*1"
               }
           ]
       };
@@ -345,10 +356,9 @@ class Order extends React.Component {
             ref="DownloadButton"
             buttonText="Download as XLS"/>
           </div>
-          <Table ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.orderId}</p>}/>
+          <Table ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
           <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} orderState={this.state.orderState} fromSon={this.fs}>
           </OrderForm>
-          {addButton}
         </TemplatePage>
       );
     }
