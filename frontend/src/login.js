@@ -80,7 +80,7 @@ class NormalLoginForm extends React.Component {
                     var mstr = data["message"];
                     if (rstate) {
                         console.log("login succeed!");
-                        this.props.history.push("/food")
+                        this.props.history.push("/food/admin/0")
                     }
                     else {
                         alert(mstr)
@@ -102,7 +102,7 @@ class NormalLoginForm extends React.Component {
                     <Input className="userpass"  value={this.state.userpass} onChange={this.handleUserpassChange}  prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" />
                 </Form.Item>
                 <Form.Item validateStatus={this.state.lastvalidateStatus} help={this.state.lastHelp}>
-                    <Button type="primary" className="login-form-button">登录</Button>
+                    <Button type="primary" className="login-form-button" onClick={this.handleSubmit}>登录</Button>
                     <div><Link to= {{ pathname:"/register", state:{userType:"customer"} }}>消费者注册</Link></div>
                     <div><Link to={{ pathname:"/register", state:{userType:"business"} }}>商家注册</Link></div>
                 </Form.Item>

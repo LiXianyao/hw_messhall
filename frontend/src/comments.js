@@ -5,11 +5,11 @@ import TemplatePage from './template'
 const { TextArea } = Input;
 
 const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
+    '吹爆老食堂的红薯',
+    '强烈推荐第二食堂的鱼',
+    '前两天在麻辣烫窗口吃出菜虫 呕',
+    '支持楼上维权',
+    '第一食堂新菜出炉啦 欢迎大家来品尝',
 ];
 
 class Comments extends React.Component {

@@ -9,10 +9,10 @@ import Food from './food'
 import Order from './order';
 import Comments from './comments';
 import InfoForm from './info';
+import MyCart from './cart';
 
 
 //ReactDOM.render(<WrappedNormalRegisterForm />, document.getElementById('registerBox'));
-//ReactDOM.render(<FoodForm />, document.getElementById('root'));
 
 ReactDOM.render(
   <BrowserRouter>
@@ -24,6 +24,7 @@ ReactDOM.render(
           <Route path='/order/:type/:id' component={Order} />
           <Route path='/comments/:type/:id' component={Comments} />
           <Route path='/info/:type/:id' component={InfoForm} />
+          <Route path='/cart/:type/:id' component={MyCart} />
         </Switch>
       </div>
   </BrowserRouter>,
