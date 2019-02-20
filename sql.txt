@@ -1,43 +1,73 @@
 CREATE DATABASE IF NOT EXISTS messHall  DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
-create table tblUser
+create table tbluser
 (
-	userId VARCHAR(100) not null,
-	userName varchar(100) not null,
-	userPass varchar(100) not null,
-	userPhone varchar(100) not null,
-	userAge int null,
-	userGender int default 0 null comment '0为未填写，1为男，2为女',
-	userType int default 0 null comment '0为admin，1为business，2为customer',
-	constraint tblUser_pk
-		primary key (userId)
+  userId     int auto_increment
+    primary key,
+  userName   varchar(100)     not null,
+  userPass   varchar(100)     not null,
+  userPhone  varchar(100)     not null,
+  userAge    int(3)           null,
+  userGender int(1) default 0 null comment '0为未填写，1为男，2为女',
+  userType   varchar(50)      not null comment '0为admin，1为business，2为customer'
 )
+  comment '用户信息表';
 
-create table tblFood
+
+
+create table tblfood
 (
-	foodId varchar(100) not null,
-	foodName varchar(100) not null,
-	foodPrice DECIMAL(6,2) not null,
-	foodImage varchar(100) null,
-	userId varchar(100) not null comment '餐品所属商家',
-	constraint tblFood_pk
-		primary key (foodId)
+  foodId    int auto_increment
+    primary key,
+  foodName  varchar(100) not null,
+  foodPrice int          not null,
+  belongId  int          not null comment '餐品所属商家',
+  constraint tblfood_tbluser_userId_fk
+    foreign key (belongId) references tbluser (userId)
+      on update cascade on delete cascade
 )
-comment '餐品信息表';
+  comment '餐品信息表';
 
-create table tblCart
+
+
+create table tblfood
 (
-	userId varchar(100) not null,
-	foodId varchar(100) not null,
-	updateTime datetime default CURRENT_TIMESTAMP not null,
-	foodNum int default 1 not null,
-	cartPaied int default 0 not null,
-	constraint tblCart_pk
-		primary key (userId, foodId, updateTime)
+  foodId    int auto_increment
+    primary key,
+  foodName  varchar(100) not null,
+  foodPrice int          not null,
+  belongId  int          not null comment '餐品所属商家',
+  constraint tblfood_tbluser_userId_fk
+    foreign key (belongId) references tbluser (userId)
+      on update cascade on delete cascade
 )
-comment '购物车信息表';
+  comment '餐品信息表';
+
+create table tblorder
+(
+  orderId    varchar(100)                          not null
+    primary key,
+  businessId int                                   not null,
+  customerId int                                   not null,
+  time       datetime    default CURRENT_TIMESTAMP not null,
+  price      int         default 0                 not null,
+  phone      varchar(100)                          not null,
+  state      varchar(20) default '未支付'             not null,
+  content    varchar(512)                          not null,
+  constraint tblorder_tbluser_userId_fk
+    foreign key (customerId) references tbluser (userId)
+      on update cascade on delete cascade
+);
 
 
 
+create table commentId
+(
+	commentId varchar(100) not null,
+	content varchar(512) not null,
+	constraint commentId_pk
+		primary key (commentId)
+);
 
-comment '用户信息表';
+
+
 
