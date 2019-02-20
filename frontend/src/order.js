@@ -345,7 +345,7 @@ class Order extends React.Component {
             ref="DownloadButton"
             buttonText="Download as XLS"/>
           </div>
-          <Table ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} />
+          <Table ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.orderId}</p>}/>
           <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} orderState={this.state.orderState} fromSon={this.fs}>
           </OrderForm>
           {addButton}
