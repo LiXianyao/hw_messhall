@@ -1,3 +1,5 @@
+@import '~antd/dist/antd.css';
+
 body {
   margin: 0;
   padding: 0;
@@ -14,7 +16,22 @@ code {
     monospace;
 }
 
-#loginBox {
+.download-table-xls-button {
+    background-color: white;
+    color:black;
+    border: 2px solid #e7e7e7;
+    float:right
+}
+
+.download-table-xls-button:hover {
+    background-color:#e7e7e7;
+    color:black;
+    border: 2px solid #e7e7e7
+}
+
+.register-form {
+  max-width: 300px;
+  max-height: 600px;
   position: absolute;
   top:50%;
   left: 50%;
@@ -22,10 +39,36 @@ code {
   margin-left: -150px;
 }
 
-#registerBox {
+.register-form-button {
+  width: 90%;
+}
+
+.login-form {
+  max-width: 300px;
+  max-height: 600px;
   position: absolute;
   top:50%;
   left: 50%;
   margin-top: -200px;
   margin-left: -150px;
 }
+
+.login-form-button {
+  width: 100%;
+}
+
+
+.info-form {
+  max-width: 300px;
+  max-height: 600px;
+  position: absolute;
+  top:50%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -150px;
+}
+
+.info-modify-button {
+  width: 90%;
+}
+

@@ -1,6 +1,8 @@
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Link } from 'react-router-dom'
+import {withRouter} from 'react-router'
 import React from 'react';
-import './login.css'
+import './index.css'
 
 class NormalLoginForm extends React.Component {
     constructor(props) {
@@ -73,6 +75,16 @@ class NormalLoginForm extends React.Component {
             )
                 .then(res => res.json())
                 .then(data => {
+                    console.log(data);
+                    var rstate = data["succeed"];
+                    var mstr = data["message"];
+                    if (rstate) {
+                        console.log("login succeed!");
+                        this.props.history.push("/food")
+                    }
+                    else {
+                        alert(mstr)
+                    }
                 })
                 .catch(e => console.log('错误:', e))
         }
@@ -90,10 +102,9 @@ class NormalLoginForm extends React.Component {
                     <Input className="userpass"  value={this.state.userpass} onChange={this.handleUserpassChange}  prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" />
                 </Form.Item>
                 <Form.Item validateStatus={this.state.lastvalidateStatus} help={this.state.lastHelp}>
-                    <Checkbox className="remember-me">记住我</Checkbox>
-                    <a className="login-form-forgot">忘记密码</a>
-                    <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-                    <a>注册</a>
+                    <Button type="primary" className="login-form-button">登录</Button>
+                    <div><Link to= {{ pathname:"/register", state:{userType:"customer"} }}>消费者注册</Link></div>
+                    <div><Link to={{ pathname:"/register", state:{userType:"business"} }}>商家注册</Link></div>
                 </Form.Item>
             </Form>
         );
@@ -101,4 +112,4 @@ class NormalLoginForm extends React.Component {
 }
 
 const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
-export default WrappedNormalLoginForm;
+export default withRouter(WrappedNormalLoginForm);
