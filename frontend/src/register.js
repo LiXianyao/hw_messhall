@@ -115,7 +115,7 @@ class NormalRegisterForm extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item >
-                    <Button type="primary" className="register-form-button">注册</Button>
+                    <Button type="primary" className="register-form-button" onClick={this.handleSubmit}>注册</Button>
                 </Form.Item>
             </Form>
         );
