@@ -1,40 +1,41 @@
 package edu.graduate.messhall.bean;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="tbluser")
+@Data
 public class TblUser {
     @Id //是主键
-    @Column(nullable = false , length = 100)
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false , length = 11, columnDefinition = "无意义自增主键")
+    public int userId;
+
+    @Column(nullable = false , length = 100, columnDefinition = "用户登录名（不可重复）")
+    public String userName;
+
+    @Column(nullable = false , length = 100, columnDefinition = "用户密码")
+    public String userPass;
 
     @Column(nullable = false , length = 100)
-    private String userName;
-
-    @Column(nullable = false , length = 100)
-    private String userPass;
-
-    @Column(nullable = false , length = 100)
-    private String userPhone;
+    public String userPhone;
 
     @Column(nullable = false , length = 3)
-    private Integer userAge;
+    public int userAge;
 
     @Column(nullable = false , length = 1)
-    private Integer userGender;
+    public int userGender;
 
-    @Column(nullable = false , length = 1)
-    private Integer userType;
+    @Column(nullable = false , length = 50)
+    public String userType;
 
-    public TblUser() {}
+    public TblUser(){
+    }
 
-    public TblUser(String userId, String userName, String userPass, String userPhone, Integer userAge,
-                   Integer userGender, Integer userType){
-        this.userId = userId;
+    public TblUser(String userName, String userPass, String userPhone, int userAge,
+                   int userGender, String userType){
         this.userName = userName;
         this.userPass = userPass;
         this.userPhone = userPhone;
@@ -43,13 +44,4 @@ public class TblUser {
         this.userType = userType;
     }
 
-    public TblUser(String userId, String userName, String userPass, String userPhone, Integer userAge,
-                   Integer userGender){
-        this.userId = userId;
-        this.userName = userName;
-        this.userPass = userPass;
-        this.userPhone = userPhone;
-        this.userAge = userAge;
-        this.userGender = userGender;
-    }
 }

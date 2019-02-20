@@ -7,10 +7,10 @@ create table tbluser
   userPass   varchar(100)     not null,
   userPhone  varchar(100)     not null,
   userAge    int(3)           null,
-  userGender int(1) default 0 null comment '0ÎªÎ´ÌîÐ´£¬1ÎªÄÐ£¬2ÎªÅ®',
-  userType   varchar(50)      not null comment '0Îªadmin£¬1Îªbusiness£¬2Îªcustomer'
+  userGender int(1) default 0 null comment '0ÎªÎ´ï¿½ï¿½Ð´ï¿½ï¿½1Îªï¿½Ð£ï¿½2ÎªÅ®',
+  userType   varchar(50)      not null comment '0Îªadminï¿½ï¿½1Îªbusinessï¿½ï¿½2Îªcustomer'
 )
-  comment 'ÓÃ»§ÐÅÏ¢±í';
+  comment 'ï¿½Ã»ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½';
 
 
 
@@ -20,12 +20,12 @@ create table tblfood
     primary key,
   foodName  varchar(100) not null,
   foodPrice int          not null,
-  belongId  int          not null comment '²ÍÆ·ËùÊôÉÌ¼Ò',
+  belongId  int          not null comment 'ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½',
   constraint tblfood_tbluser_userId_fk
     foreign key (belongId) references tbluser (userId)
       on update cascade on delete cascade
 )
-  comment '²ÍÆ·ÐÅÏ¢±í';
+  comment 'ï¿½ï¿½Æ·ï¿½ï¿½Ï¢ï¿½ï¿½';
 
 
 
@@ -35,12 +35,12 @@ create table tblfood
     primary key,
   foodName  varchar(100) not null,
   foodPrice int          not null,
-  belongId  int          not null comment '²ÍÆ·ËùÊôÉÌ¼Ò',
+  belongId  int          not null comment 'ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½',
   constraint tblfood_tbluser_userId_fk
     foreign key (belongId) references tbluser (userId)
       on update cascade on delete cascade
 )
-  comment '²ÍÆ·ÐÅÏ¢±í';
+  comment 'ï¿½ï¿½Æ·ï¿½ï¿½Ï¢ï¿½ï¿½';
 
 create table tblorder
 (
@@ -51,7 +51,7 @@ create table tblorder
   time       datetime    default CURRENT_TIMESTAMP not null,
   price      int         default 0                 not null,
   phone      varchar(100)                          not null,
-  state      varchar(20) default 'Î´Ö§¸¶'             not null,
+  state      varchar(20) default 'Î´Ö§ï¿½ï¿½'             not null,
   content    varchar(512)                          not null,
   constraint tblorder_tbluser_userId_fk
     foreign key (customerId) references tbluser (userId)
@@ -60,13 +60,15 @@ create table tblorder
 
 
 
-create table commentId
+create table tblcomment
 (
-	commentId varchar(100) not null,
-	content varchar(512) not null,
-	constraint commentId_pk
-		primary key (commentId)
+  commentId   varchar(100)                        not null
+    primary key,
+  content     varchar(512)                        not null,
+  createdTime timestamp default CURRENT_TIMESTAMP not null
 );
+
+
 
 
 
