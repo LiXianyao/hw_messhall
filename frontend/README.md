@@ -61,7 +61,7 @@ Compiled with warning后
 打开浏览器访问下列网址即可看到各个界面
 >http://localhost:3000/login  
 >http://localhost:3000/food/admin/0  
->http://localhost:3000/food/business/0
+>http://localhost:3000/food/business/0  
 >http://localhost:3000/food/customer/0
 
 在admin business 和 customer 页面下可以感受到权限的区分  
