@@ -5,6 +5,7 @@ import edu.graduate.messhall.bean.responseObject;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +15,7 @@ import edu.graduate.messhall.bean.TblUser;
 @RestController
 class loginRestController{
     //连接数据库User表
+    @Autowired
     private TblUserRepository tblUserRepository;
 
     private final Logger log = LoggerFactory.getLogger(loginRestController.class);
