@@ -1,8 +1,10 @@
 package edu.graduate.messhall.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="tbluser")
@@ -30,6 +32,10 @@ public class TblUser {
 
     @Column(nullable = false , length = 50)
     public String userType;
+
+    /*多对一映射，一个（商家用户多种菜）*/
+    @OneToMany(mappedBy = "belong",cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private Set<TblFood> tblFoods;
 
     public TblUser(){
     }

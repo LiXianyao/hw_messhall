@@ -1,5 +1,6 @@
 package edu.graduate.messhall.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,12 +21,21 @@ public class TblFood {
     public int foodPrice;
 
     /*多对一映射，一个（商家用户多种菜）*/
-    @ManyToOne(cascade = {CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "belongId",foreignKey = @ForeignKey(name = "tblfood_tbluser_userId_fk"))
+    @JsonIgnore
     public TblUser belong;
 
     //@Column(nullable = false , length = 11, columnDefinition = "用户id")
     //public int belongId;
+
+    @Transient
+    private int belongId;
+    @Transient//非数据库属性
+    private String belongName;
+
+    public TblFood(){
+    }
 
     public TblFood(String foodName, int foodPrice, TblUser belong){
         this.foodName = foodName;
