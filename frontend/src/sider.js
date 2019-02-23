@@ -6,7 +6,6 @@ class MySider extends React.Component {
   constructor(props) {
     super(props);
     // ES6 类中函数必须手动绑定
-    this.handleClick = this.handleClick.bind(this);
     this.pathfood = "/food/" + this.props.userType + "/" + this.props.userId
     this.pathcart = "/cart/" + this.props.userType + "/" + this.props.userId
     this.pathorder = "/order/" + this.props.userType + "/" + this.props.userId
@@ -29,14 +28,10 @@ class MySider extends React.Component {
     }*/
   }
 
-  handleClick(event) {
-    console.log(event)
-  }
 
   render() {
     return (
       <Menu
-        onClick={this.handleClick}
         style={{ height:'100%' }}
         defaultSelectedKeys={this.props.siderValue}
         mode="inline"
