@@ -64,7 +64,6 @@ class NormalLoginForm extends React.Component {
 
             const init = {
                 method: 'POST',
-                credentials: 'include', // cookies
                 headers: initHeaders,
                 body
             }
@@ -80,7 +79,8 @@ class NormalLoginForm extends React.Component {
                     var mstr = data["message"];
                     if (rstate) {
                         console.log("login succeed!");
-                        this.props.history.push("/food/admin/0")
+                        var path = "/food/" + data["userType"] + "/" + data["userId"]
+                        this.props.history.push(path)
                     }
                     else {
                         alert(mstr)

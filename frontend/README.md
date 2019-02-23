@@ -31,19 +31,15 @@
 出现 welcome to react 界面即成功
 
 #安装订餐项目依赖包
-从github上下载订餐项目后，frontend文件夹即为react工程
+从github上下载订餐项目后，frontend文件夹即为react工程  
 进入frontend文件夹开始安装依赖包
 >cd frontend/  
->npm init
-
-一路狂按回车就可以  
-react这个命令会生成初始的package.json文件，不然的话直接安装包会报save error  
-然后用下面这个命令安装依赖包
 >npm install --save xxx
 
 xxx是依赖包名字  
-所需依赖包列表如下  
-
+所需依赖包列表如下 
+ 
++ react
 + react-dom
 + react-scripts
 + antd
@@ -65,5 +61,4 @@ Compiled with warning后
 >http://localhost:3000/food/customer/0
 
 在admin business 和 customer 页面下可以感受到权限的区分  
-目前完成登录注册页面，餐品列表界面，订单列表界面，留言板界面，我的资料界面。  
-购物车界面未完成，和后端通信未完成。
+餐品列表界面food，购物车页面cart,订单列表界面order，留言板界面comments，我的资料界面info。  

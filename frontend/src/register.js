@@ -33,7 +33,6 @@ class NormalRegisterForm extends React.Component {
 
                 const init = {
                     method: 'POST',
-                    credentials: 'include', // cookies
                     headers: initHeaders,
                     body
                 }
