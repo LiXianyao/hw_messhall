@@ -50,7 +50,7 @@ public class foodController {
 
     //handle the POST-/foodModify：检查餐品存在-插入数据表-返回结果
     @RequestMapping(value = "/foodModify", method = {RequestMethod.POST})
-    public responseObject addFoodRequest(@RequestBody foodModifyEntity entity){
+    public responseObject modifyFoodRequest(@RequestBody foodModifyEntity entity){
         String foodName = entity.getFoodName();
         int foodPrice = entity.getFoodPrice();
         int foodId = entity.getFoodId();
@@ -77,7 +77,7 @@ public class foodController {
 
     //handle the POST-/foodDelete：检查餐品存在-删除数据表-返回结果
     @RequestMapping(value = "/foodDelete", method = {RequestMethod.POST})
-    public responseObject addFoodRequest(@RequestBody foodDeleteEntity entity){
+    public responseObject deleteFoodRequest(@RequestBody foodDeleteEntity entity){
         int foodId = entity.getFoodId();
 
         TblFood searchRes = tblFoodRepository.findByFoodId(foodId);
@@ -100,7 +100,7 @@ public class foodController {
 
     //handle the POST-/foodQuery：检查用户类型-查询数据表-返回结果
     @RequestMapping(value = "/foodQuery", method = {RequestMethod.POST})
-    public  List<TblFood> addFoodRequest(@RequestBody foodQueryEntity entity){
+    public  List<TblFood> queryFoodRequest(@RequestBody foodQueryEntity entity){
         int userId = entity.getUserId();
         String userType = entity.getUserType();
 
