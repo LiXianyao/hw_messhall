@@ -25,6 +25,8 @@ public class TblComment {
     @Generated(GenerationTime.INSERT)
     private Timestamp createdTime;
 
+    public TblComment (){}
+
     public TblComment(String content){
         this.content = content;
     }
