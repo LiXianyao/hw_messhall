@@ -44,4 +44,11 @@ public class TblCart {
         this.user = belong;
     }
 
+    public void addFoodNum(int num){
+        this.foodNum += num;
+    }
+
+    public void decFoodNum(int num){
+        this.foodNum -= num;
+    }
 }
