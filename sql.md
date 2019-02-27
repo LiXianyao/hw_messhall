@@ -57,6 +57,19 @@ create table tblcomment
   createdTime timestamp default CURRENT_TIMESTAMP not null
 );
 
+create table tblcart
+(
+  userId  int           null,
+  foodId  int           null,
+  foodNum int default 1 not null,
+  constraint tblCart_tblfood_foodId_fk
+    foreign key (foodId) references tblfood (foodId)
+      on delete cascade,
+  constraint tblCart_tbluser_userId_fk
+    foreign key (userId) references tbluser (userId)
+      on delete cascade
+);
+
 
 
 
