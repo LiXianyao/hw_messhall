@@ -31,18 +31,21 @@ create table tblfood
 
 create table tblorder
 (
-  orderId    varchar(100)                          not null
+  orderId    varchar(100)                       not null
     primary key,
-  businessId int                                   not null,
-  customerId int                                   not null,
-  time       datetime    default CURRENT_TIMESTAMP not null,
-  price      int         default 0                 not null,
-  phone      varchar(100)                          not null,
-  state      varchar(20) default '未支付'             not null,
-  content    varchar(512)                          not null,
+  businessId int                                not null,
+  customerId int                                not null,
+  time       datetime default CURRENT_TIMESTAMP not null,
+  price      int default '0'                    not null,
+  phone      varchar(100)                       not null,
+  state      varchar(20) default '未支付'          not null,
+  content    varchar(512)                       not null,
   constraint tblorder_tbluser_userId_fk
-    foreign key (customerId) references tbluser (userId)
-      on update cascade on delete cascade
+  foreign key (customerId) references tbluser (userId)
+    on update cascade
+    on delete cascade,
+  constraint tblorder_tbluser_userId_fk_2
+  foreign key (businessId) references tbluser (userId)
 );
 
 
