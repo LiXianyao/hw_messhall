@@ -46,7 +46,7 @@ public class cartController {
             else{
                 TblCart newCart = new TblCart(toAddUser, toAddFood, 1);
                 tblCartRepository.save(newCart);
-                response = new responseObject(false,"购物车添加成功！！");
+                response = new responseObject(true,"购物车添加成功！！");
             }
         }
         catch (Exception e){
@@ -55,74 +55,68 @@ public class cartController {
         return response;
     }
 
-    //handle the POST-/cartModify：检查餐品存在-插入数据表-返回结果
+    //handle the POST-/cartModify：检查购物车项目存在-插入数据表-返回结果
     @RequestMapping(value = "/cartModify", method = {RequestMethod.POST})
     public responseObject modifycartRequest(@RequestBody cartModifyEntity entity){
         int userId = entity.getUserId();
         int foodId = entity.getFoodId();
         int foodNum = entity.getFoodNum();
 
-        TblUser toModifyUser = tblUserRepository.findByUserId(userId);
-        TblFood toModifyFood = tblFoodRepository.findByFoodId(foodId);
-        TblCart searchRes = tblCartRepository.findByUserAndFood(toModifyUser, toModifyFood);
+        TblCart searchRes = tblCartRepository.findByUser_UserIdAndFood_FoodId(userId, foodId);
         responseObject response;
         if(searchRes != null){
             try{
-                /*根据请求修改指定的餐品*/
-                searchRes.setcartPrice(cartPrice);
-                searchRes.setcartName(cartName);
-                tblcartRepository.save(searchRes);
-                response = new responseObject(true,"餐品修改成功！！");
+                searchRes.setFoodNum(foodNum);
+                tblCartRepository.save(searchRes);
+                response = new responseObject(true,"购物车修改成功！！");
             }
             catch (Exception e){
                 response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
             }
         }
         else{
-            response = new responseObject(false,"餐品不存在，操作失败");
+            response = new responseObject(false,"购物车项目不存在，操作失败");
         }
         return response;
     }
 
-    //handle the POST-/cartDelete：检查餐品存在-删除数据表-返回结果
-    @RequestMapping(value = "/cartDelete", method = {RequestMethod.POST})
+    //handle the POST-/cartDelete：检查购物车项目存在-删除数据表-返回结果
+    @RequestMapping(value = "/cartDel", method = {RequestMethod.POST})
     public responseObject deletecartRequest(@RequestBody cartDeleteEntity entity){
-        int cartId = entity.getcartId();
+        int userId = entity.getUserId();
+        int foodId = entity.getFoodId();
 
-        Tblcart searchRes = tblcartRepository.findBycartId(cartId);
+        TblCart searchRes = tblCartRepository.findByUser_UserIdAndFood_FoodId(userId, foodId);
         responseObject response;
-        if(searchRes != null){
-            try{
-                /*根据请求删除指定的餐品*/
-                tblcartRepository.delete(searchRes);
-                response = new responseObject(true,"餐品删除成功！！");
+        try{
+            if(searchRes != null){
+                    /*根据请求删除指定的餐品*/
+                    tblCartRepository.delete(searchRes);
+                    response = new responseObject(true,"购物车删除成功！！");
             }
-            catch (Exception e){
-                response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
+            else{
+                response = new responseObject(false,"购物车项目不存在，操作失败");
             }
         }
-        else{
-            response = new responseObject(false,"餐品不存在，操作失败");
+        catch (Exception e){
+            response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
         }
         return response;
     }
 
-    //handle the POST-/cartQuery：检查用户类型-查询数据表-返回结果
+    //handle the POST-/cartQuery：查询数据表-返回结果
     @RequestMapping(value = "/cartQuery", method = {RequestMethod.POST})
-    public  List<Tblcart> querycartRequest(@RequestBody cartQueryEntity entity){
+    public  List<TblCart> querycartRequest(@RequestBody cartQueryEntity entity){
         int userId = entity.getUserId();
-        String userType = entity.getUserType();
 
         /*如果是business返回id下的餐品; 如果是admin和customer返回所有餐品*/
-        List<Tblcart> searchRes;
-        if(userType.equals("business"))
-            searchRes = tblcartRepository.findAllByBelong_UserIdOrderBycartIdAsc(userId);
-        else
-            searchRes = tblcartRepository.findAll();
+        List<TblCart> searchRes
+                = tblCartRepository.findAllByUser_UserId(userId);
 
-        for(Tblcart cart: searchRes){
-            cart.setBelongId(cart.getBelong().getUserId());
-            cart.setBelongName(cart.getBelong().getUserName());
+        for(TblCart cart: searchRes){
+            cart.setFoodName(cart.getFood().getFoodName());
+            cart.setFoodPrice(cart.getFood().getFoodPrice());
+            cart.setBelongName(cart.getUser().getUserName());
         }
         return searchRes;
     }
