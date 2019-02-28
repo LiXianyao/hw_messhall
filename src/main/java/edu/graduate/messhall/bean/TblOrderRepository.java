@@ -4,13 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface TblFoodRepository extends JpaRepository<TblFood, Integer> {
-    TblFood findByBelong(TblUser Belong);
-    //TblFood findByBelongId(int BelongId);
+public interface TblOrderRepository extends JpaRepository<TblOrder, Integer> {
+    TblOrder findByOrderId(String orderId);
 
-    TblFood findByFoodNameAndFoodId(String FoodName, int FoodId);
+    List<TblOrder> findAllByBusinessIdOrderByTimeAsc(int businessId);
 
-    TblFood findByFoodId(int FoodId);
+    List<TblOrder> findAllByCustomerIdOrderByTimeAsc(int customerId);
 
-    List<TblFood> findAllByBelong_UserIdOrderByFoodIdAsc(int userId);
+    List<TblOrder> findAllByOrderByTimeAsc();
 }
