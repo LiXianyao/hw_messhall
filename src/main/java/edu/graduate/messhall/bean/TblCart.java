@@ -8,13 +8,18 @@ import javax.persistence.*;
 @Entity
 @Table(name="tblcart")
 @Data
-public class TblCart {
+public class TblCart{
+
+    @Id //是主键
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false , length = 11, columnDefinition = "无意义自增主键")
+    public int cartId;
 
     /*多对一映射，一个用户会有多条购物车记录*/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId",foreignKey = @ForeignKey(name = "tblCart_tbluser_userId_fk"))
     @JsonIgnore
-    public TblUser user;
+    private TblUser user;
 
     /*多对一映射，一个用户会点多钟菜*/
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,15 +30,20 @@ public class TblCart {
     @Column(nullable = false , length = 11, columnDefinition = "餐品数量")
     private int foodNum;
 
+    @Column(name = "userId", insertable = false, updatable = false, nullable = false , length = 11, columnDefinition = "餐品Id")
+    private int belongId;
+
+    @Column(name = "foodId", insertable = false, updatable = false, nullable = false , length = 11, columnDefinition = "餐品Id")
+    private int foodId;
+
+    @Transient//非数据库属性
+    private String belongName;
+    @Transient
+    static private boolean checked = false;
     @Transient
     private int foodPrice;
     @Transient
     private String foodName;
-    @Transient//非数据库属性
-    private String belongName;
-
-    @Transient
-    static private boolean checked = false;
 
     public TblCart(){
     }
@@ -52,3 +62,4 @@ public class TblCart {
         this.foodNum -= num;
     }
 }
+
