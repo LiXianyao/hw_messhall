@@ -61,5 +61,11 @@ public class TblCart{
     public void decFoodNum(int num){
         this.foodNum -= num;
     }
+
+    public void setCartInfo(){
+        this.setFoodName(this.getFood().getFoodName());
+        this.setFoodPrice(this.getFood().getFoodPrice());
+        this.setBelongName(this.getUser().getUserName());
+    }
 }
 
