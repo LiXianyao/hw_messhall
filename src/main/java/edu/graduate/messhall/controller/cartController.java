@@ -114,9 +114,7 @@ public class cartController {
                 = tblCartRepository.findAllByUser_UserId(userId);
 
         for(TblCart cart: searchRes){
-            cart.setFoodName(cart.getFood().getFoodName());
-            cart.setFoodPrice(cart.getFood().getFoodPrice());
-            cart.setBelongName(cart.getUser().getUserName());
+            cart.setCartInfo();
         }
         return searchRes;
     }
