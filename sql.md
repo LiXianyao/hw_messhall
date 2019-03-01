@@ -62,16 +62,19 @@ create table tblcomment
 
 create table tblcart
 (
-  userId  int           null,
-  foodId  int           null,
-  foodNum int default 1 not null,
+  cartId  int auto_increment
+    primary key,
+  userId  int             null,
+  foodId  int             null,
+  foodNum int default '1' not null,
   constraint tblCart_tblfood_foodId_fk
-    foreign key (foodId) references tblfood (foodId)
-      on delete cascade,
+  foreign key (foodId) references tblfood (foodId)
+    on delete cascade,
   constraint tblCart_tbluser_userId_fk
-    foreign key (userId) references tbluser (userId)
-      on delete cascade
+  foreign key (userId) references tbluser (userId)
+    on delete cascade
 );
+
 
 
 
