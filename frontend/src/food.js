@@ -26,41 +26,43 @@ class Food extends React.Component {
           foodPrice:"",
           userName:"",
           searchText:"",
+          modal:false,
+          delFood:"",
           data:[
               {
-                  foodId:"00001",
+                  foodId:1,
                   foodName:"麻辣香锅",
-                  userName:"第一食堂",
+                  belongName:"第一食堂",
                   foodPrice:15
               },
               {
-                foodId:"00002",
+                foodId:2,
                 foodName:"水煮鱼",
-                userName:"第一食堂",
+                belongName:"第一食堂",
                 foodPrice:17
               },
               {
-                foodId:"00003",
+                foodId:3,
                 foodName:"兰州拉面",
-                userName:"第一食堂",
+                belongName:"第一食堂",
                 foodPrice:12
               },
               {
-                foodId:"00004",
+                foodId:4,
                 foodName:"海鲜面",
-                userName:"第二食堂",
+                belongName:"第二食堂",
                 foodPrice:15
               },
               {
-                foodId:"00005",
+                foodId:5,
                 foodName:"米饭",
-                userName:"第二食堂",
+                belongName:"第二食堂",
                 foodPrice:2
               },
               {
-                foodId:"00006",
+                foodId:6,
                 foodName:"馒头",
-                userName:"第二食堂",
+                belongName:"第二食堂",
                 foodPrice:1
               }
           ]
@@ -68,7 +70,10 @@ class Food extends React.Component {
       this.handleAdd = this.handleAdd.bind(this);
       this.handleModify = this.handleModify.bind(this);
       this.fs = this.fs.bind(this);
-      this.showConfirm = this.showConfirm.bind(this)
+      this.addToCart = this.addToCart.bind(this);
+      this.foodDel = this.foodDel.bind(this);
+      this.hideModal = this.hideModal.bind(this);
+      this.showModal = this.showModal.bind(this);
     }
 
     getColumnSearchProps = (dataIndex) => ({
@@ -155,7 +160,7 @@ class Food extends React.Component {
       )
     }
 
-    fs(v){
+    fs(v,flag){
       this.setState(
         {
           visible:v,
@@ -164,23 +169,156 @@ class Food extends React.Component {
           foodPrice:""
         }
       )
+      if(flag==1)
+      {
+        this.getAllFood();
+      }
     }
 
-    showConfirm() {
-      confirm({
-        title: 'Do you want to delete these items?',
-        content: '确定要删除吗？',
-        onOk() {
-          
-        },
-        onCancel() {},
-      });
+    getAllFood()
+    {
+        let initHeaders = new Headers();
+        initHeaders.append('Accept', 'application/json, text/plain, */*');
+        initHeaders.append('Cache-Control', 'no-cache');
+        initHeaders.append('Content-Type', 'application/json');
+
+        let formData = {};
+        formData['userType'] = this.userType;
+        formData['userId'] = this.userId;
+        console.log(formData);
+        let body = JSON.stringify(formData);
+        console.log(body);
+
+        const init = {
+            method: 'POST',
+            headers: initHeaders,
+            body
+        }
+
+        fetch(
+            'http://10.108.113.251:8080/foodQuery',
+            init
+        )
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                this.setState(
+                    {
+                        data:data
+                    }
+                )
+            })
+            .catch(e => console.log('错误:', e))
+    }
+
+    addToCart(record){
+      let initHeaders = new Headers();
+      initHeaders.append('Accept', 'application/json, text/plain, */*');
+      initHeaders.append('Cache-Control', 'no-cache');
+      initHeaders.append('Content-Type', 'application/json');
+
+      let formData = {};
+      formData['foodId'] = record.foodId;
+      formData['userId'] = this.userId;
+      console.log(formData);
+      let body = JSON.stringify(formData);
+      console.log(body);
+
+      const init = {
+          method: 'POST',
+          headers: initHeaders,
+          body
+      }
+
+      fetch(
+          'http://10.108.113.251:8080/cartAdd',
+          init
+      )
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            var rstate = data["succeed"];
+            var mstr = data["message"];
+            if (rstate) {
+                alert("加入购物车成功")
+                console.log("add to cart succeed!");
+            }
+            else {
+                alert(mstr)
+            }
+          })
+          .catch(e => console.log('错误:', e))
+    }
+
+    hideModal()
+    {
+      this.setState(
+        {
+          modal:false
+        }
+      )
+    }
+
+    showModal(fid)
+    {
+      this.setState(
+        {
+          delFood:fid,
+          modal:true
+        }
+      )
+    }
+
+    foodDel()
+    {
+      let initHeaders = new Headers();
+      initHeaders.append('Accept', 'application/json, text/plain, */*');
+      initHeaders.append('Cache-Control', 'no-cache');
+      initHeaders.append('Content-Type', 'application/json');
+
+      let formData = {};
+      formData['foodId'] = this.state.delFood;
+      console.log(formData);
+      let body = JSON.stringify(formData);
+      console.log(body);
+
+      const init = {
+          method: 'POST',
+          headers: initHeaders,
+          body
+      }
+
+      fetch(
+          'http://10.108.113.251:8080/foodDelete',
+          init
+      )
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            var rstate = data["succeed"];
+            var mstr = data["message"];
+            if (rstate) {
+                alert("菜品删除成功")
+                console.log("food delete succeed!");
+                this.hideModal();
+                this.getAllFood();
+            }
+            else {
+                alert(mstr)
+            }
+          })
+          .catch(e => console.log('错误:', e))
     }
 
     componentDidMount (){
       const tableCon = ReactDOM.findDOMNode(this.refs['table'])
       const table = tableCon.querySelector('table')
       table.setAttribute('id','table-to-xls')
+    }
+
+    componentWillMount()
+    {
+      this.getAllFood();
     }
   
   
@@ -198,8 +336,8 @@ class Food extends React.Component {
             },
             {
                 title: "所属商家",
-                dataIndex: "userName",
-                ...this.getColumnSearchProps('userName')
+                dataIndex: "belongName",
+                ...this.getColumnSearchProps('belongName')
             },
             {
                 title: "餐品单价",
@@ -212,14 +350,14 @@ class Food extends React.Component {
                 render: (text,record) => {
                   if(this.userType == "customer"){
                     return <span>
-                    <Button>加入购物车</Button>
+                    <Button onClick={this.addToCart.bind(this,record)}>加入购物车</Button>
                     </span>
                   }
                   else{
                     return <span>
                     <Button  onClick={this.handleModify.bind(this,record)}>修改</Button>
                     <Divider type="vertical" />
-                    <Button onClick={this.showConfirm}>删除</Button>
+                    <Button onClick={this.showModal.bind(this,record.foodId)}>删除</Button>
                     </span>
                   }
                 }
@@ -249,6 +387,17 @@ class Food extends React.Component {
           <FoodForm visible={this.state.visible} operation={this.state.operation} userId={this.userId} userName={this.state.userName} foodId={this.state.foodId} foodName={this.state.foodName} foodPrice={this.state.foodPrice} fromSon={this.fs} userType={this.userType}>
           </FoodForm>
           {addButton}
+          <Modal
+            title="Do you want to delete this food?"
+            visible={this.state.modal}
+            onOk={this.foodDel}
+            onCancel={this.hideModal}
+            okText="确认"
+            okType="danger"
+            cancelText="取消"
+          >
+          <p>确定删除此菜品吗？</p>
+          </Modal>
         </TemplatePage>
       );
     }
