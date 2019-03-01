@@ -69,7 +69,7 @@ class NormalLoginForm extends React.Component {
             }
 
             fetch(
-                'http://localhost:8080/login',
+                'http://10.108.113.251:8080/login',
                 init
             )
                 .then(res => res.json())

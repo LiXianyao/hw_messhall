@@ -11,7 +11,7 @@ class MyOrderForm extends React.Component {
             time:"",
             price:"",
             phone:"",
-            orderState:""
+            state:""
         } 
         this.handleClose = this.handleClose.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -19,7 +19,7 @@ class MyOrderForm extends React.Component {
 
     handleClose()
     {
-        this.props.fromSon(false);
+        this.props.fromSon(false,0);
         this.setState(
             {
                 visible:false
@@ -27,9 +27,57 @@ class MyOrderForm extends React.Component {
         )
     }
 
-    handleSubmit()
-    {
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let initHeaders = new Headers();
+                initHeaders.append('Accept', 'application/json, text/plain, */*');
+                initHeaders.append('Cache-Control', 'no-cache');
+                initHeaders.append('Content-Type', 'application/json');
 
+                let formData = {};
+                
+                formData['orderId'] = this.props.orderId;
+                formData['price'] = values.price;
+                formData['phone'] = values.phone;
+                formData['state'] = values.state;
+                console.log(formData);
+                let body = JSON.stringify(formData);
+                console.log(body);
+
+                const init = {
+                    method: 'POST',
+                    headers: initHeaders,
+                    body
+                }
+
+                fetch(
+                    'http://10.108.113.251:8080/orderModify',
+                    init
+                )
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        var rstate = data["succeed"];
+                        var mstr = data["message"];
+                        if (rstate) {
+                            alert("订单修改成功")
+                            console.log("order modify succeed!");
+                            this.props.fromSon(false,1);
+                            this.setState(
+                                {
+                                    visible:false
+                                }
+                            ) 
+                        }
+                        else {
+                            alert(mstr)
+                        }
+                    })
+                    .catch(e => console.log('错误:', e))
+            }
+        });
     }
 
     componentWillMount()
@@ -38,7 +86,7 @@ class MyOrderForm extends React.Component {
 
     handleCurrencyChange = (currency) => {
         if (!('value' in this.props)) {
-          this.setState({ orderState:currency });
+          this.setState({ state:currency });
         }
         this.triggerChange({ currency });
     }
@@ -61,7 +109,7 @@ class MyOrderForm extends React.Component {
         var time = moment(this.props.time,'YYYY-MM-DD HH:mm:ss')
         var price = this.props.price
         var phone = this.props.phone
-        var orderState = this.props.orderState
+        var state = this.props.state
         return (
             <Drawer
             title="Order Drawer"
@@ -75,15 +123,7 @@ class MyOrderForm extends React.Component {
             }}
           >
             <Form layout="horizontal" onSubmit={this.handleSubmit}  className="food-form">
-                <h1>{this.props.operation}订单{this.props.orderId}</h1>
-                <Form.Item label="下单时间" {...formItemLayout}>
-                {getFieldDecorator('date-time-picker', {
-                    rules: [{ type: 'object', required: true, message: 'Please select time!' }],
-                    initialValue: time
-                })(
-                    <DatePicker style={{width:200}} showTime format="YYYY-MM-DD HH:mm:ss" />
-                )}
-                </Form.Item>
+                <h1>{this.props.operation}订单</h1>
                 <Form.Item label="订单总价" {...formItemLayout}>
                     {getFieldDecorator('price', {
                         rules: [
@@ -106,9 +146,9 @@ class MyOrderForm extends React.Component {
                     )}
                 </Form.Item>
                 <Form.Item label="订单状态" {...formItemLayout}>
-                    {getFieldDecorator('gender', {
+                    {getFieldDecorator('state', {
                     rules: [{ required: true, message: 'Please select state!' }],
-                    initialValue: orderState
+                    initialValue: state
                     })(
                         <Select
                             onChange={this.handleCurrencyChange}
@@ -124,7 +164,7 @@ class MyOrderForm extends React.Component {
                 </Form.Item>
                 <Form.Item >
                   <Button className="order-form-no" onClick={this.handleClose}>取消</Button>
-                  <Button type="primary" className="order-form-yes" onClick={this.handleClose}>提交</Button>
+                  <Button type="primary" className="order-form-yes" htmlType="submit">提交</Button>
                 </Form.Item>
             </Form>
           </Drawer>

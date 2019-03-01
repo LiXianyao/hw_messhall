@@ -44,7 +44,7 @@ class MyInfoForm extends React.Component {
                 }
 
                 fetch(
-                    'http://localhost:8080/infoModify',
+                    'http://10.108.113.251:8080/infoModify',
                     init
                 )
                     .then(res => res.json())
@@ -55,6 +55,7 @@ class MyInfoForm extends React.Component {
                         if (rstate) {
                             alert("资料修改成功")
                             console.log("info modify succeed!");
+                            this.getInfo();
                         }
                         else {
                             alert(mstr)
@@ -65,7 +66,7 @@ class MyInfoForm extends React.Component {
         });
     }
 
-    componentWillMount()
+    getInfo()
     {
         let initHeaders = new Headers();
         initHeaders.append('Accept', 'application/json, text/plain, */*');
@@ -85,7 +86,7 @@ class MyInfoForm extends React.Component {
         }
 
         fetch(
-            'http://localhost:8080/infoQuery',
+            'http://10.108.113.251:8080/infoQuery',
             init
         )
             .then(res => res.json())
@@ -101,6 +102,11 @@ class MyInfoForm extends React.Component {
                 )
             })
             .catch(e => console.log('错误:', e))
+    }
+
+    componentWillMount()
+    {
+        this.getInfo();
     }
 
     render() {
@@ -150,11 +156,14 @@ class MyInfoForm extends React.Component {
                 </Form.Item>
                 <Form.Item label="用户性别" {...formItemLayout}> 
                     {getFieldDecorator('userGender', {
+                        rules: [
+                            { required: true, message: 'Please choose your gender!'}
+                        ],
                         initialValue: defaultUserGender
                     })(
                         <Radio.Group>
-                            <Radio.Button value="1">Male</Radio.Button>
-                            <Radio.Button value="2">Female</Radio.Button>
+                            <Radio.Button value={1}>Male</Radio.Button>
+                            <Radio.Button value={2}>Female</Radio.Button>
                         </Radio.Group>
                     )}
                 </Form.Item>
