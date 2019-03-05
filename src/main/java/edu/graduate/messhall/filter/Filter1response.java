@@ -13,10 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 
-@WebFilter(urlPatterns = "/*", filterName = "responseFilter")
-@Order(0)
-public class responseFilter extends HttpFilter {
-    private final Logger log = LoggerFactory.getLogger(responseFilter.class);
+@WebFilter(urlPatterns = "/*", filterName = "Filter1response")
+public class Filter1response extends HttpFilter {
+    private final Logger log = LoggerFactory.getLogger(Filter1response.class);
 
     private String[] allowedPatterns = {};
     private String[] allowedSuffiexs = {".js", ".css", ".ico", ".json"};
