@@ -1,4 +1,5 @@
 import { Table,Input, Button, Icon, Divider,Modal } from 'antd';
+import {withRouter} from 'react-router'
 import Highlighter from 'react-highlight-words';
 import React from 'react';
 import TemplatePage from './template'
@@ -155,6 +156,7 @@ class Food extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -164,6 +166,10 @@ class Food extends React.Component {
         )
             .then(res => res.json())
             .then(data => {
+                if(data["loginRequired"] == -1){
+                    alert("请先登录")
+                    this.props.history.push("/login")
+                }
                 console.log(data);
                 this.setState(
                     {
@@ -190,6 +196,7 @@ class Food extends React.Component {
       const init = {
           method: 'POST',
           headers: initHeaders,
+          credentials:"include",
           body
       }
 
@@ -248,6 +255,7 @@ class Food extends React.Component {
       const init = {
           method: 'POST',
           headers: initHeaders,
+          credentials:"include",
           body
       }
 
@@ -267,7 +275,7 @@ class Food extends React.Component {
                 this.getAllFood();
             }
             else {
-                alert(mstr)
+              alert(mstr)
             }
           })
           .catch(e => console.log('错误:', e))
@@ -351,7 +359,7 @@ class Food extends React.Component {
           </FoodForm>
           {addButton}
           <Modal
-            title="Do you want to delete this food?"
+            title="提示"
             visible={this.state.modal}
             onOk={this.foodDel}
             onCancel={this.hideModal}
@@ -366,4 +374,4 @@ class Food extends React.Component {
     }
   }
 
-export default Food;
+export default withRouter(Food);

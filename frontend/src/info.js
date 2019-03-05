@@ -1,4 +1,5 @@
 import {Radio, Form, Icon, Input, Button} from 'antd';
+import {withRouter} from 'react-router'
 import React from 'react';
 import TemplatePage from './template'
 import './index.css'
@@ -40,6 +41,7 @@ class MyInfoForm extends React.Component {
                 const init = {
                     method: 'POST',
                     headers: initHeaders,
+                    credentials:"include",
                     body
                 }
 
@@ -82,6 +84,7 @@ class MyInfoForm extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -91,6 +94,10 @@ class MyInfoForm extends React.Component {
         )
             .then(res => res.json())
             .then(data => {
+                if(data["loginRequired"] == -1){
+                    alert("请先登录")
+                    this.props.history.push("/login")
+                }
                 console.log(data);
                 this.setState(
                     {
@@ -184,4 +191,4 @@ class MyInfoForm extends React.Component {
 }
 
 const InfoForm = Form.create()(MyInfoForm);
-export default InfoForm 
+export default withRouter(InfoForm);

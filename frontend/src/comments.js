@@ -1,4 +1,5 @@
 import {List,Input,Button} from 'antd';
+import {withRouter} from 'react-router'
 import React from 'react';
 import TemplatePage from './template'
 
@@ -34,6 +35,7 @@ class Comments extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -84,6 +86,7 @@ class Comments extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -131,6 +134,7 @@ class Comments extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -140,6 +144,10 @@ class Comments extends React.Component {
         )
             .then(res => res.json())
             .then(data => {
+                if(data["loginRequired"] == -1){
+                    alert("请先登录")
+                    this.props.history.push("/login")
+                }
                 console.log(data);
                 this.setState(
                     {
@@ -178,4 +186,4 @@ class Comments extends React.Component {
     }
 }
 
-export default Comments;
+export default withRouter(Comments);

@@ -56,6 +56,7 @@ class MyFoodForm extends React.Component {
                 const init = {
                     method: 'POST',
                     headers: initHeaders,
+                    credentials:"include",
                     body
                 }
 
