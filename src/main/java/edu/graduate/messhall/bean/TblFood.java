@@ -43,4 +43,8 @@ public class TblFood {
         this.belong = belong;
     }
 
+    public void setFoodInfo(){
+        this.setBelongId(this.getBelong().getUserId());
+        this.setBelongName(this.getBelong().getUserName());
+    }
 }

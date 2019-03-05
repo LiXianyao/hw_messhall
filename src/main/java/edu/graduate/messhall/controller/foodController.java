@@ -112,8 +112,7 @@ public class foodController {
             searchRes = tblFoodRepository.findAll();
 
         for(TblFood food: searchRes){
-            food.setBelongId(food.getBelong().getUserId());
-            food.setBelongName(food.getBelong().getUserName());
+            food.setFoodInfo();
         }
         return searchRes;
     }
