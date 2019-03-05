@@ -254,7 +254,7 @@ class Order extends React.Component {
           .catch(e => console.log('错误:', e))
     }
 
-    orderCheck(oid,oldstate){
+    orderCheck(oid,price,phone,state,oldstate){
       let initHeaders = new Headers();
       initHeaders.append('Accept', 'application/json, text/plain, */*');
       initHeaders.append('Cache-Control', 'no-cache');
@@ -280,16 +280,17 @@ class Order extends React.Component {
           .then(res => res.json())
           .then(data => {
               if(data['state'] == oldstate){
-                return true;
+                this.stateChange(oid,price,phone,state,oldstate);
               }else{
-                return false;
+                alert("订单状态在此之前已发生变更，请重新确认操作");
+                console.log("state change failed!");
+                this.getOrder();
               }
           })
           .catch(e => console.log('错误:', e))
     }
 
     stateChange(oid,price,phone,state,oldstate){
-      if(this.orderCheck(oid,oldstate)){
         let initHeaders = new Headers();
         initHeaders.append('Accept', 'application/json, text/plain, */*');
         initHeaders.append('Cache-Control', 'no-cache');
@@ -330,11 +331,6 @@ class Order extends React.Component {
                 }
             })
             .catch(e => console.log('错误:', e))
-      }else{
-        alert("订单状态在此之前已发生变更，请重新确认操作");
-        console.log("state change failed!");
-        this.getOrder();
-      }
     }
   
   
@@ -382,26 +378,26 @@ class Order extends React.Component {
                 render: (text,record) => {
                   if(this.userType == "business" && record['state'] == "等待接单"){
                     return <span>
-                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"商家已接单",record['state'])}>接单</Button>
+                    <Button type="primary" onClick={this.orderCheck.bind(this,record.orderId,record.price,record.phone,"商家已接单",record['state'])}>接单</Button>
                     <Divider type="vertical" />
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭",record['state'])}>退单</Button>
+                    <Button onClick={this.orderCheck.bind(this,record.orderId,record.price,record.phone,"订单关闭",record['state'])}>退单</Button>
                     </span>
                   }else if(this.userType == "customer" && record['state'] == "等待接单"){
                     return <span>
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭",record['state'])}>取消订单</Button>
+                    <Button onClick={this.orderCheck.bind(this,record.orderId,record.price,record.phone,"订单关闭",record['state'])}>取消订单</Button>
                     </span>
                   }
                   else if(this.userType == "business" && record['state'] == "商家已接单"){
                     return <span>
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"备餐完成",record['state'])}>备餐完成</Button>
+                    <Button onClick={this.orderCheck.bind(this,record.orderId,record.price,record.phone,"备餐完成",record['state'])}>备餐完成</Button>
                     </span>
                   }else if(this.userType == "customer" && record['state'] =="备餐完成"){
                     return <span>
-                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成",record['state'])}>取餐确认</Button>
+                    <Button type="primary" onClick={this.orderCheck.bind(this,record.orderId,record.price,record.phone,"订单完成",record['state'])}>取餐确认</Button>
                     </span>
                   }else if(this.userType == "customer" && record['state'] =="商家已接单"){
                     return <span>
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成",record['state'])}>取餐确认</Button>
+                    <Button onClick={this.orderCheck.bind(this,record.orderId,record.price,record.phone,"订单完成",record['state'])}>取餐确认</Button>
                     </span>
                   }else if(this.userType == "admin"){
                     return <span>

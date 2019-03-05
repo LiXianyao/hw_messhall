@@ -39,7 +39,7 @@ class MyOrderForm extends React.Component {
                 let formData = {};
                 
                 formData['orderId'] = this.props.orderId;
-                formData['price'] = values.price;
+                formData['price'] = values.price * 1.0;
                 formData['phone'] = values.phone;
                 formData['state'] = values.state;
                 console.log(formData);

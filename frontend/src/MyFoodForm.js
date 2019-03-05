@@ -48,7 +48,7 @@ class MyFoodForm extends React.Component {
                 }
                 
                 formData['foodName'] = values.foodName;
-                formData['foodPrice'] = values.foodPrice;
+                formData['foodPrice'] = values.foodPrice * 1.0;
                 console.log(formData);
                 let body = JSON.stringify(formData);
                 console.log(body);

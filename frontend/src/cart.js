@@ -312,6 +312,7 @@ class MyCart extends React.Component {
                 if (rstate) {
                     alert(mstr)
                     console.log("order add succeed!")
+                    this.getCart();
                 }
                 else {
                     alert(mstr)
