@@ -66,50 +66,57 @@ class NormalRegisterForm extends React.Component {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 },
         }
+        var theUserType = "消费者";
+        if(this.userType=="admin")
+        {
+            theUserType = "管理员";
+        }else if(this.userType=="business"){
+            theUserType = "商家";
+        }
         return (
             <Form layout="horizontal" onSubmit={this.handleSubmit}  className="register-form">
-                <h1>{this.userType}注册</h1>
+                <h1>{theUserType}注册</h1>
                 <Form.Item label="用户名称" {...formItemLayout}>
                     {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: 'Please input your username!' }]
+                        rules: [{ required: true, message: '请输入您的用户名!' }]
                     })(
-                        <Input className="username"  prefix={<Icon type="user" style={{ fontSize: 13 }} />}  placeholder="Username" />
+                        <Input className="username"  prefix={<Icon type="user" style={{ fontSize: 13 }} />}  placeholder="用户名" />
                     )}
                 </Form.Item>
                 <Form.Item label="用户密码" {...formItemLayout}>
                     {getFieldDecorator('userPass', {
-                        rules: [{ required: true, message: 'Please input your password!' }]
+                        rules: [{ required: true, message: '请输入您的密码!' }]
                     })(
-                        <Input className="userpass"  prefix={<Icon type="lock" style={{ fontSize: 13 }} />} placeholder="Password" />
+                        <Input className="userpass"  prefix={<Icon type="lock" style={{ fontSize: 13 }} />} placeholder="密码" />
                     )}
                 </Form.Item>
                 <Form.Item label="联系电话" {...formItemLayout}>
                     {getFieldDecorator('userPhone', {
                         rules: [
-                            { required: true, pattern:/^1\d{10}$/, message: 'Please input your correct phone!'}
+                            { required: true, pattern:/^1\d{10}$/, message: '请输入正确的手机号!'}
                         ]
                     })(
-                        <Input className="userphone"  prefix={<Icon type="phone" style={{ fontSize: 13 }} />} placeholder="Telephone" />
+                        <Input className="userphone"  prefix={<Icon type="phone" style={{ fontSize: 13 }} />} placeholder="手机号" />
                     )}
                 </Form.Item>
                 <Form.Item label="用户年龄" {...formItemLayout}>
                     {getFieldDecorator('userAge', {
                         rules: [
-                            { required: true, pattern:/^([1-9]|[1-9][0-9])$/, message: 'Please input your correct age!'}
+                            { required: true, pattern:/^([1-9]|[1-9][0-9])$/, message: '请输入您的年龄!'}
                         ]
                     })(
-                        <Input className="userage"  prefix={<Icon type="solution" style={{ fontSize: 13 }} />} placeholder="Age" />
+                        <Input className="userage"  prefix={<Icon type="solution" style={{ fontSize: 13 }} />} placeholder="年龄" />
                     )}
                 </Form.Item>
                 <Form.Item label="用户性别" {...formItemLayout}>
                     {getFieldDecorator('userGender', {
                         rules: [
-                            { required: true, message: 'Please choose your gender!'}
+                            { required: true, message: '请选择您的性别!'}
                         ]
                     })(
                         <Radio.Group style={{width:"191px"}}>
-                            <Radio.Button value={1}>Male</Radio.Button>
-                            <Radio.Button value={2}>Female</Radio.Button>
+                            <Radio.Button value={1}>男</Radio.Button>
+                            <Radio.Button value={2}>女</Radio.Button>
                         </Radio.Group>
                     )}
                 </Form.Item>

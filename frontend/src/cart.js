@@ -10,35 +10,7 @@ class MyCart extends React.Component {
         this.userId = this.props.match.params.id
         this.siderValue = ["cart"]
         this.state={
-          arr:[
-            {
-                "checked":false,
-                "foodId": "00001",
-                "foodName": "麻辣香锅",
-                "belongName" : "第一食堂",
-                "belongId" : "10001",
-                "foodPrice": 20,
-                "foodNum": 1,
-            },
-            {
-                "checked":false,
-                "foodId": "00002",
-                "foodName": "麻辣拌",
-                "belongName" : "第二食堂",
-                "belongId" : "10002",
-                "foodPrice": 15 ,
-                "foodNum": 1,
-            },
-            {
-                "checked":false,
-                "foodId": "00003",
-                "foodName": "米饭",
-                "belongName" : "第一食堂",
-                "belongId" : "10001",
-                "foodPrice": 2 ,
-                "foodNum": 1,
-            }
-          ],
+          arr:[],
           sum_price:0
         }
     }
@@ -71,6 +43,7 @@ class MyCart extends React.Component {
                 data.forEach((ele)=>{
                     ele["checked"]=false;
                 })
+                console.log(data)
                 this.setState(
                     {
                         arr:data

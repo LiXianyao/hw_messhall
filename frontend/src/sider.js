@@ -11,23 +11,8 @@ class MySider extends React.Component {
     this.pathorder = "/order/" + this.props.userType + "/" + this.props.userId
     this.pathcomment = "/comments/" + this.props.userType + "/" + this.props.userId
     this.pathinfo = "/info/" + this.props.userType + "/" + this.props.userId
+    this.pathreport = "/report/" + this.props.userType + "/" + this.props.userId
   }
-
-  componentWillMount() {
-    /*f(this.props.userType == null){
-      alert("请先登录")
-      this.props.history.push("/login")
-    }
-    else if(this.props.userType == "admin"){
-      this.setState(
-        {
-          isadmin: true
-        }
-      )
-
-    }*/
-  }
-
 
   render() {
     return (
@@ -39,6 +24,7 @@ class MySider extends React.Component {
         <Menu.Item key="food"><Link to={this.pathfood}>餐品列表</Link></Menu.Item>
         <Menu.Item key="cart"><Link to={this.pathcart}>购物车</Link></Menu.Item>
         <Menu.Item key="order"><Link to={this.pathorder}>我的订单</Link></Menu.Item>
+        <Menu.Item key="report"><Link to={this.pathreport}>报表统计</Link></Menu.Item>
         <Menu.Item key="comments"><Link to={this.pathcomment}>留言板</Link></Menu.Item>
         <Menu.Item key="info"><Link to={this.pathinfo}>我的资料</Link></Menu.Item>
       </Menu>

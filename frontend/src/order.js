@@ -29,118 +29,7 @@ class Order extends React.Component {
           state:"",
           modal:false,
           delOrder:"",
-          data:[
-              {
-                orderId:"00001",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"等待接单",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00002",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"商家已接单",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00003",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"备餐完成",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00004",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"订单完成",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00005",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"订单关闭",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00006",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"等待接单",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00007",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"商家已接单",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00008",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"备餐完成",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"00009",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"订单完成",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"000010",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"订单关闭",
-                content:"米饭*1 麻辣香锅*1"
-              },
-              {
-                orderId:"000011",
-                customerName:"w",
-                businessName:"第一食堂",
-                time:"2019-02-18 18:40:33",
-                price:"22",
-                phone:"13333333333",
-                state:"订单关闭",
-                content:"米饭*1 麻辣香锅*1"
-              }
-          ]
+          data:[]
       };
       this.handleAdd = this.handleAdd.bind(this);
       this.handleModify = this.handleModify.bind(this);
@@ -157,7 +46,7 @@ class Order extends React.Component {
           <div style={{ padding: 8 }}>
             <Input
               ref={node => { this.searchInput = node; }}
-              placeholder={`Search ${dataIndex}`}
+              placeholder={"关键词"}
               value={selectedKeys[0]}
               onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
               onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
@@ -170,14 +59,14 @@ class Order extends React.Component {
               size="small"
               style={{ width: 90, marginRight: 8 }}
             >
-              Search
+              搜索
             </Button>
             <Button
               onClick={() => this.handleReset(clearFilters)}
               size="small"
               style={{ width: 90 }}
             >
-              Reset
+              重置
             </Button>
           </div>
         ),
@@ -291,7 +180,6 @@ class Order extends React.Component {
                     foodStr = foodStr + food.foodName + "*" + food.foodNum + " ";
                   })
                   ele.content = foodStr;
-                  console.log(ele.time);
                   ele.time = moment(ele.time).utcOffset(0).format("YYYY-MM-DD HH:mm:ss");
                 })
                 this.setState({
@@ -366,7 +254,7 @@ class Order extends React.Component {
           .catch(e => console.log('错误:', e))
     }
 
-    stateChange(oid,price,phone,state){
+    orderCheck(oid,oldstate){
       let initHeaders = new Headers();
       initHeaders.append('Accept', 'application/json, text/plain, */*');
       initHeaders.append('Cache-Control', 'no-cache');
@@ -375,9 +263,6 @@ class Order extends React.Component {
       let formData = {};
       
       formData['orderId'] = oid;
-      formData['price'] = price;
-      formData['phone'] = phone;
-      formData['state'] = state;
       console.log(formData);
       let body = JSON.stringify(formData);
       console.log(body);
@@ -389,24 +274,67 @@ class Order extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/orderModify',
+          'http://10.108.113.251:8080/orderCheck',
           init
       )
           .then(res => res.json())
           .then(data => {
-              console.log(data);
-              var rstate = data["succeed"];
-              var mstr = data["message"];
-              if (rstate) {
-                  alert("订单状态已变更")
-                  console.log("state change succeed!");
-                  this.getOrder();
-              }
-              else {
-                  alert(mstr)
+              if(data['state'] == oldstate){
+                return true;
+              }else{
+                return false;
               }
           })
           .catch(e => console.log('错误:', e))
+    }
+
+    stateChange(oid,price,phone,state,oldstate){
+      if(this.orderCheck(oid,oldstate)){
+        let initHeaders = new Headers();
+        initHeaders.append('Accept', 'application/json, text/plain, */*');
+        initHeaders.append('Cache-Control', 'no-cache');
+        initHeaders.append('Content-Type', 'application/json');
+
+        let formData = {};
+        
+        formData['orderId'] = oid;
+        formData['price'] = price;
+        formData['phone'] = phone;
+        formData['state'] = state;
+        console.log(formData);
+        let body = JSON.stringify(formData);
+        console.log(body);
+
+        const init = {
+            method: 'POST',
+            headers: initHeaders,
+            body
+        }
+
+        fetch(
+            'http://10.108.113.251:8080/orderModify',
+            init
+        )
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                var rstate = data["succeed"];
+                var mstr = data["message"];
+                if (rstate) {
+                    alert("订单状态已变更")
+                    console.log("state change succeed!");
+                    this.getOrder();
+                }
+                else {
+                    alert(mstr)
+                }
+            })
+            .catch(e => console.log('错误:', e))
+      }else{
+        alert("订单状态在此之前已发生变更，请重新确认操作");
+        console.log("state change failed!");
+        this.getOrder();
+      }
     }
   
   
@@ -414,12 +342,17 @@ class Order extends React.Component {
     render() {
         const columns = [
             {
-                title: "消费者名称",
+                title: "订单ID",
+                dataIndex: "orderId",
+                ...this.getColumnSearchProps('orderId')
+            },
+            {
+                title: "消费者",
                 dataIndex: "customerName",
                 ...this.getColumnSearchProps('customerName')
             },
             {
-                title: "商家名称",
+                title: "商家",
                 dataIndex: "businessName",
                 ...this.getColumnSearchProps('businessName')
             },
@@ -429,7 +362,7 @@ class Order extends React.Component {
                 ...this.getColumnSearchProps('time')
             },
             {
-                title: "订单总价",
+                title: "总价",
                 dataIndex: "price",
                 ...this.getColumnSearchProps('price')
             },
@@ -439,36 +372,36 @@ class Order extends React.Component {
                 ...this.getColumnSearchProps('phone')
             },
             {
-                title: "订单状态",
+                title: "状态",
                 dataIndex: "state",
                 ...this.getColumnSearchProps('state')
             },
             {
-                title: 'Action',
+                title: '操作',
                 dataIndex: 'action',
                 render: (text,record) => {
                   if(this.userType == "business" && record['state'] == "等待接单"){
                     return <span>
-                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"商家已接单")}>接单</Button>
+                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"商家已接单",record['state'])}>接单</Button>
                     <Divider type="vertical" />
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭")}>退单</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭",record['state'])}>退单</Button>
                     </span>
                   }else if(this.userType == "customer" && record['state'] == "等待接单"){
                     return <span>
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭")}>取消订单</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭",record['state'])}>取消订单</Button>
                     </span>
                   }
                   else if(this.userType == "business" && record['state'] == "商家已接单"){
                     return <span>
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"备餐完成")}>备餐完成</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"备餐完成",record['state'])}>备餐完成</Button>
                     </span>
                   }else if(this.userType == "customer" && record['state'] =="备餐完成"){
                     return <span>
-                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成")}>取餐确认</Button>
+                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成",record['state'])}>取餐确认</Button>
                     </span>
                   }else if(this.userType == "customer" && record['state'] =="商家已接单"){
                     return <span>
-                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成")}>取餐确认</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成",record['state'])}>取餐确认</Button>
                     </span>
                   }else if(this.userType == "admin"){
                     return <span>
@@ -498,9 +431,9 @@ class Order extends React.Component {
             filename="订单表格"
             sheet="ordertablexls"
             ref="DownloadButton"
-            buttonText="Download as XLS"/>
+            buttonText="导出表格"/>
           </div>
-          <Table ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
+          <Table pagination={{ pageSize: 20 }} ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
           <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} state={this.state.state} fromSon={this.fs}>
           </OrderForm>
           <Modal
