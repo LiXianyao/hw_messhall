@@ -75,7 +75,7 @@ public class orderController {
     //handle the POST-/orderModify：检查订单项目存在-插入数据表-返回结果
     @RequestMapping(value = "/orderModify", method = {RequestMethod.POST})
     public responseObject modifyOrderRequest(@RequestBody orderModifyEntity entity){
-        String orderId = entity.getOrderId();
+        int orderId = entity.getOrderId();
         Date time = entity.getTime();
         int price = entity.getPrice();
         String phone = entity.getPhone();
@@ -105,7 +105,7 @@ public class orderController {
     //handle the POST-/orderDelete：检查订单项目存在-删除数据表-返回结果
     @RequestMapping(value = "/orderDel", method = {RequestMethod.POST})
     public responseObject deleteorderRequest(@RequestBody orderDeleteEntity entity){
-        String orderId = entity.getOrderId();
+        int orderId = entity.getOrderId();
 
         TblOrder searchRes = tblOrderRepository.findByOrderId(orderId);
         responseObject response;
@@ -125,7 +125,7 @@ public class orderController {
         return response;
     }
 
-    static String[] userTypes = {"admin", "business", "customer"};
+    private static String[] userTypes = {"admin", "business", "customer"};
 
     //handle the POST-/orderQuery：查询数据表-返回结果
     @RequestMapping(value = "/orderQuery", method = {RequestMethod.POST})
@@ -141,6 +141,29 @@ public class orderController {
             searchRes = tblOrderRepository.findAllByBusinessIdOrderByTimeAsc(userId);
         }else{
             searchRes = tblOrderRepository.findAllByCustomerIdOrderByTimeAsc(userId);
+        }
+
+        for(TblOrder order: searchRes){
+            order.setOrderInfo();
+        }
+        return searchRes;
+    }
+
+    //handle the POST-/orderStatistic：统计数据表-返回结果
+    @RequestMapping(value = "/orderStatistic", method = {RequestMethod.POST})
+    public  List<TblOrder> statisticOrderRequest(@RequestBody orderStatisticEntity entity){
+        Date startDate = entity.getStartDate();
+        Date endDate = entity.getEndDate();
+        String userType = entity.getUserType();
+        int userId = entity.getUserId();
+
+         List<TblOrder> searchRes;
+        if(userType.equals(userTypes[0])){
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndStateEqualsOrderByTimeAsc(startDate, endDate, "订单关闭");
+        }else if(userType.equals(userTypes[1])){
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndBusinessIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, "订单关闭");
+        }else{
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndCustomerIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, "订单关闭");
         }
 
         for(TblOrder order: searchRes){
@@ -170,7 +193,7 @@ class orderAddEntity{
 
 @Data
 class orderModifyEntity{
-    private String orderId;
+    private int orderId;
     private Date time;
     private int price;
     private String phone;
@@ -179,11 +202,19 @@ class orderModifyEntity{
 
 @Data
 class orderDeleteEntity{
-    private String orderId;
+    private int orderId;
 }
 
 @Data
 class orderQueryEntity{
+    private int userId;
+    private String userType;
+}
+
+@Data
+class orderStatisticEntity{
+    private Date startDate;
+    private Date endDate;
     private int userId;
     private String userType;
 }
