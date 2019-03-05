@@ -15,10 +15,9 @@ import java.util.List;
 @Data
 public class TblOrder {
     @Id //是主键
-    @GenericGenerator(strategy = "uuid", name = "orderId")
-    @GeneratedValue(generator = "orderId")
-    @Column(nullable = false , length = 100, columnDefinition = "无意义uuid主键")
-    public String orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false , length = 11, columnDefinition = "无意义自增主键")
+    public int orderId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
