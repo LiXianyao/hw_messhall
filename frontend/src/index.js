@@ -10,6 +10,12 @@ import Order from './order';
 import Comments from './comments';
 import InfoForm from './info';
 import MyCart from './cart';
+import Report from './report';
+import { LocaleProvider } from 'antd';
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
+import moment from 'moment'
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 
 
 //ReactDOM.render(<WrappedNormalRegisterForm />, document.getElementById('registerBox'));
@@ -17,6 +23,7 @@ import MyCart from './cart';
 ReactDOM.render(
   <BrowserRouter>
       <div>
+        <LocaleProvider locale={zh_CN}>
         <Switch>
           <Route path='/login' component={WrappedNormalLoginForm} />
           <Route path='/register' component={WrappedNormalRegisterForm} />
@@ -25,7 +32,9 @@ ReactDOM.render(
           <Route path='/comments/:type/:id' component={Comments} />
           <Route path='/info/:type/:id' component={InfoForm} />
           <Route path='/cart/:type/:id' component={MyCart} />
+          <Route path='/report/:type/:id' component={Report} />
         </Switch>
+        </LocaleProvider>
       </div>
   </BrowserRouter>,
   document.getElementById('root')

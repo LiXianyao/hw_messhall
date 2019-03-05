@@ -39,7 +39,7 @@ class MyOrderForm extends React.Component {
                 let formData = {};
                 
                 formData['orderId'] = this.props.orderId;
-                formData['price'] = values.price;
+                formData['price'] = values.price * 1.0;
                 formData['phone'] = values.phone;
                 formData['state'] = values.state;
                 console.log(formData);
@@ -127,27 +127,27 @@ class MyOrderForm extends React.Component {
                 <Form.Item label="订单总价" {...formItemLayout}>
                     {getFieldDecorator('price', {
                         rules: [
-                            { required: true, pattern:/^\d+$/, message: 'Please input integer!'}
+                            { required: true, pattern:/^([1-9]\d*|0)(\.\d{1,2})?$/, message: '请输入订单总价!'}
                         ],
                         initialValue: price
                         
                     })(
-                        <Input style={{width:200}} className="price" placeholder="price" />
+                        <Input style={{width:200}} className="price" placeholder="订单总价" />
                     )}
                 </Form.Item>
                 <Form.Item label="联系电话" {...formItemLayout}>
                     {getFieldDecorator('phone', {
                         rules: [
-                            { required: true, pattern:/^1\d{10}$/, message: 'Please input the correct phone!'}
+                            { required: true, pattern:/^1\d{10}$/, message: '请输入联系方式!'}
                         ],
                         initialValue: phone
                     })(
-                        <Input style={{width:200}} className="phone" placeholder="phone" />
+                        <Input style={{width:200}} className="phone" placeholder="联系方式" />
                     )}
                 </Form.Item>
                 <Form.Item label="订单状态" {...formItemLayout}>
                     {getFieldDecorator('state', {
-                    rules: [{ required: true, message: 'Please select state!' }],
+                    rules: [{ required: true, message: '请选择订单状态!' }],
                     initialValue: state
                     })(
                         <Select

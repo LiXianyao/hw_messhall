@@ -28,44 +28,7 @@ class Food extends React.Component {
           searchText:"",
           modal:false,
           delFood:"",
-          data:[
-              {
-                  foodId:1,
-                  foodName:"麻辣香锅",
-                  belongName:"第一食堂",
-                  foodPrice:15
-              },
-              {
-                foodId:2,
-                foodName:"水煮鱼",
-                belongName:"第一食堂",
-                foodPrice:17
-              },
-              {
-                foodId:3,
-                foodName:"兰州拉面",
-                belongName:"第一食堂",
-                foodPrice:12
-              },
-              {
-                foodId:4,
-                foodName:"海鲜面",
-                belongName:"第二食堂",
-                foodPrice:15
-              },
-              {
-                foodId:5,
-                foodName:"米饭",
-                belongName:"第二食堂",
-                foodPrice:2
-              },
-              {
-                foodId:6,
-                foodName:"馒头",
-                belongName:"第二食堂",
-                foodPrice:1
-              }
-          ]
+          data:[]
       };
       this.handleAdd = this.handleAdd.bind(this);
       this.handleModify = this.handleModify.bind(this);
@@ -83,7 +46,7 @@ class Food extends React.Component {
           <div style={{ padding: 8 }}>
             <Input
               ref={node => { this.searchInput = node; }}
-              placeholder={`Search ${dataIndex}`}
+              placeholder={"关键词"}
               value={selectedKeys[0]}
               onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
               onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
@@ -96,14 +59,14 @@ class Food extends React.Component {
               size="small"
               style={{ width: 90, marginRight: 8 }}
             >
-              Search
+              搜索
             </Button>
             <Button
               onClick={() => this.handleReset(clearFilters)}
               size="small"
               style={{ width: 90 }}
             >
-              Reset
+              重置
             </Button>
           </div>
         ),
@@ -345,7 +308,7 @@ class Food extends React.Component {
                 ...this.getColumnSearchProps('foodPrice')
             },
             {
-                title: 'Action',
+                title: '操作',
                 dataIndex: 'action',
                 render: (text,record) => {
                   if(this.userType == "customer"){
@@ -381,9 +344,9 @@ class Food extends React.Component {
             filename="餐品表格"
             sheet="ordertablexls"
             ref="DownloadButton"
-            buttonText="Download as XLS"/>
+            buttonText="导出表格"/>
           </div>
-          <Table ref="table" rowKey='foodId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} />
+          <Table pagination= {false} ref="table" rowKey='foodId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} />
           <FoodForm visible={this.state.visible} operation={this.state.operation} userId={this.userId} userName={this.state.userName} foodId={this.state.foodId} foodName={this.state.foodName} foodPrice={this.state.foodPrice} fromSon={this.fs} userType={this.userType}>
           </FoodForm>
           {addButton}

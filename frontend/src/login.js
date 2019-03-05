@@ -96,10 +96,10 @@ class NormalLoginForm extends React.Component {
             <Form onSubmit={this.handleSubmit}  className="login-form">
                 <h1>欢迎登录</h1>
                 <Form.Item validateStatus={this.state.namevalidateStatus} help={this.state.nameHelp}>
-                    <Input className="username"  value={this.state.username} onChange={this.handleUsernameChange} prefix={<Icon type="user" style={{ fontSize: 13 }} />}  placeholder="Username" />
+                    <Input className="username"  value={this.state.username} onChange={this.handleUsernameChange} prefix={<Icon type="user" style={{ fontSize: 13 }} />}  placeholder="用户名" />
                 </Form.Item>
                 <Form.Item validateStatus={this.state.passvalidateStatus} help={this.state.passHelp}>
-                    <Input className="userpass"  value={this.state.userpass} onChange={this.handleUserpassChange}  prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" />
+                    <Input className="userpass"  value={this.state.userpass} onChange={this.handleUserpassChange}  prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
                 </Form.Item>
                 <Form.Item validateStatus={this.state.lastvalidateStatus} help={this.state.lastHelp}>
                     <Button htmlType="submit" type="primary" className="login-form-button" onClick={this.handleSubmit}>登录</Button>

@@ -48,7 +48,7 @@ class MyFoodForm extends React.Component {
                 }
                 
                 formData['foodName'] = values.foodName;
-                formData['foodPrice'] = values.foodPrice;
+                formData['foodPrice'] = values.foodPrice * 1.0;
                 console.log(formData);
                 let body = JSON.stringify(formData);
                 console.log(body);
@@ -146,21 +146,21 @@ class MyFoodForm extends React.Component {
                 <h1>{this.props.operation}餐品</h1>
                 <Form.Item label="餐品名称" {...formItemLayout}>
                     {getFieldDecorator('foodName', {
-                        rules: [{ required: true, message: 'Please input your foodName!' }],
+                        rules: [{ required: true, message: '请输入餐品名称!' }],
                         initialValue: foodName
                     })
                     (
-                        <Input className="foodName"   placeholder="foodName" />
+                        <Input className="foodName"   placeholder="餐品名称" />
                     )}
                 </Form.Item>
                 <Form.Item label="餐品单价" {...formItemLayout}>
                     {getFieldDecorator('foodPrice', {
                         rules: [
-                            { required: true, pattern:/^\d+$/, message: 'Please input integer!'}
+                            { required: true, pattern:/^([1-9]\d*|0)(\.\d{1,2})?$/, message: '请输入餐品单价!'}
                         ],
                         initialValue: foodPrice
                     })(
-                        <Input className="foodPrice"   placeholder="foodPrice" />
+                        <Input className="foodPrice"   placeholder="餐品单价" />
                     )}
                 </Form.Item>
                 {userIdInput}

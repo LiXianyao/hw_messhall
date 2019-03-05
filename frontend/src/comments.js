@@ -4,28 +4,7 @@ import TemplatePage from './template'
 
 const { TextArea } = Input;
 
-const defaultData = [
-    {
-        commentId:"00001",
-        content:'吹爆老食堂的红薯'
-    },
-    {
-        commentId:"00002",
-        content:'强烈推荐第二食堂的鱼'
-    },
-    {
-        commentId:"00003",
-        content:'前两天在麻辣烫窗口吃出菜虫 呕'
-    },
-    {
-        commentId:"00004",
-        content:'支持楼上维权'
-    },
-    {
-        commentId:"00005",
-        content:'第一食堂新菜出炉啦 欢迎大家来品尝'
-    }
-];
+const defaultData = [];
 
 class Comments extends React.Component {
     constructor(props) {
