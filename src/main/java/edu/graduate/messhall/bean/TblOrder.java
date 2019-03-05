@@ -3,6 +3,8 @@ package edu.graduate.messhall.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import lombok.Data;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -20,8 +22,8 @@ public class TblOrder {
     public int orderId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
     @Column(nullable = false , insertable = false, updatable = false, columnDefinition = "订单生成时间")
+    @Generated(GenerationTime.INSERT)
     public Date time;
 
     @Column(nullable = false , length = 11, columnDefinition = "价格")
