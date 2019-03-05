@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @RestController
@@ -20,6 +21,8 @@ public class orderController {
     private TblUserRepository tblUserRepository;
     @Autowired
     private TblFoodRepository tblFoodRepository;
+    @Autowired
+    private TblCartRepository tblCartRepository;
 
     @Autowired
     private TblOrderRepository tblOrderRepository;
@@ -30,12 +33,14 @@ public class orderController {
     @RequestMapping(value = "/orderAdd", method = {RequestMethod.POST})
     public responseObject addOrderRequest(@RequestBody List<orderAddEntity> entities){
         HashMap<Integer, List<orderAddEntity>> orderHashMap = new HashMap<Integer, List<orderAddEntity>>();
-        HashMap<Integer, Integer> orderPriceHashMap = new HashMap<Integer, Integer>();
+        HashMap<Integer, Double> orderPriceHashMap = new HashMap<Integer, Double>();
+        ArrayList<Integer>FoodIdSet = new ArrayList<Integer>();
         TblUser customer = tblUserRepository.findByUserId(entities.get(0).getBelongId());
 
         for(orderAddEntity entity: entities) {
             //首先，把belongId的商品收在一起
             int foodId = entity.getFoodId();
+            FoodIdSet.add(foodId);
             TblFood food = tblFoodRepository.findByFoodId(foodId);
             TblUser business = food.getBelong();
             Integer businessId = business.getUserId();
@@ -46,30 +51,41 @@ public class orderController {
             orderHashMap.put(businessId, collection);
 
             //消费累计
-            Integer priceRecord = orderPriceHashMap.getOrDefault(businessId,0);
-            priceRecord += (Integer)entity.getFoodPrice() * (Integer)entity.getFoodNum();
+            double priceRecord = orderPriceHashMap.getOrDefault(businessId,0.0);
+            priceRecord += (double)entity.getFoodPrice() *  entity.getFoodNum();
             orderPriceHashMap.put(businessId, priceRecord);
         }
 
         responseObject response;
         try{
-            for(Integer businessId: orderHashMap.keySet()){
+            addOrderAndCleanCart(orderHashMap, orderPriceHashMap, FoodIdSet, customer);
+            response = new responseObject(true,"订单保存成功！！");
+        }
+        catch (Exception e){
+            log.error(e.getMessage());
+            response = new responseObject(false, e.getMessage());
+        }
+        return response;
+    }
+
+    @Transactional
+    public void addOrderAndCleanCart(HashMap<Integer, List<orderAddEntity>> orderHashMap, HashMap<Integer, Double> orderPriceHashMap ,
+                                     ArrayList<Integer>FoodIdSet, TblUser customer ){
+        for(Integer businessId: orderHashMap.keySet()){
                 //计算同一个商家下的所有开销
                 List<orderAddEntity> cartOfBusiness = orderHashMap.get(businessId);
-                log.info("!!!!start comput price");
-                int price = orderPriceHashMap.get(businessId);
+                double price = orderPriceHashMap.get(businessId);
                 TblUser business = tblUserRepository.findByUserId(businessId);
                 String content = new Gson().toJson(cartOfBusiness);
                 TblOrder newOrder = new TblOrder(business, customer, price, content);
                 tblOrderRepository.save(newOrder);
             }
 
-            response = new responseObject(true,"订单保存成功！！");
-        }
-        catch (Exception e){
-            response = new responseObject(false,"数据处理异常，操作失败，请重试或联系管理员检查数据库");
-        }
-        return response;
+            //保存订单后，清除购物车对应项目
+            for(Integer foodId: FoodIdSet){
+                TblCart searchRes = tblCartRepository.findByUser_UserIdAndFood_FoodId(customer.getUserId(),foodId);
+                tblCartRepository.delete(searchRes);
+            }
     }
 
     //handle the POST-/orderModify：检查订单项目存在-插入数据表-返回结果
@@ -77,7 +93,7 @@ public class orderController {
     public responseObject modifyOrderRequest(@RequestBody orderModifyEntity entity){
         int orderId = entity.getOrderId();
         Date time = entity.getTime();
-        int price = entity.getPrice();
+        double price = entity.getPrice();
         String phone = entity.getPhone();
         String state = entity.getState();
 
@@ -93,6 +109,7 @@ public class orderController {
                 response = new responseObject(true,"订单修改成功！！");
             }
             catch (Exception e){
+                log.error(e.getMessage());
                 response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
             }
         }
@@ -120,7 +137,31 @@ public class orderController {
             }
         }
         catch (Exception e){
+            log.error(e.getMessage());
             response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
+        }
+        return response;
+    }
+
+    //handle the POST-/orderCheck：检查订单项目存在-删除数据表-返回结果
+    @RequestMapping(value = "/orderCheck", method = {RequestMethod.POST})
+    public orderResponse checkOrderRequest(@RequestBody orderCheckEntity entity){
+        int orderId = entity.getOrderId();
+
+        TblOrder searchRes = tblOrderRepository.findByOrderId(orderId);
+        orderResponse response;
+        try{
+            if(searchRes != null){
+                    /*根据请求删除指定的订单*/
+                    response = new orderResponse(searchRes.getState(),true,"订单删除成功！！");
+            }
+            else{
+                response = new orderResponse(false,"订单项目不存在，操作失败");
+            }
+        }
+        catch (Exception e){
+            log.error(e.getMessage());
+            response = new orderResponse(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
         }
         return response;
     }
@@ -179,7 +220,7 @@ public class orderController {
 class orderAddEntity{
     private int foodId;
     private String foodName;
-    private int foodPrice;
+    private double foodPrice;
     private int foodNum;
     private String belongName;
     private int belongId;
@@ -196,13 +237,18 @@ class orderAddEntity{
 class orderModifyEntity{
     private int orderId;
     private Date time;
-    private int price;
+    private double price;
     private String phone;
     private String state;
 }
 
 @Data
 class orderDeleteEntity{
+    private int orderId;
+}
+
+@Data
+class orderCheckEntity{
     private int orderId;
 }
 
@@ -223,14 +269,14 @@ class orderStatisticEntity{
 
 @Data
 class orderResponse extends responseObject{
-    private String userName;
+    private String state;
+
+    orderResponse(String state, boolean succeed, String message){
+        super(succeed, message);
+        this.state = state;
+    }
 
     orderResponse(boolean succeed, String message){
         super(succeed, message);
-    }
-
-    orderResponse(String userName, boolean succeed, String message){
-        super(succeed, message);
-        this.userName = userName;
     }
 }
