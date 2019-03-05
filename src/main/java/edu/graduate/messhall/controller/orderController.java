@@ -156,14 +156,15 @@ public class orderController {
         Date endDate = entity.getEndDate();
         String userType = entity.getUserType();
         int userId = entity.getUserId();
+        String state = entity.getState();
 
          List<TblOrder> searchRes;
         if(userType.equals(userTypes[0])){
-            searchRes = tblOrderRepository.findAllByTimeBetweenAndStateEqualsOrderByTimeAsc(startDate, endDate, "订单关闭");
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndStateEqualsOrderByTimeAsc(startDate, endDate, state);
         }else if(userType.equals(userTypes[1])){
-            searchRes = tblOrderRepository.findAllByTimeBetweenAndBusinessIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, "订单关闭");
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndBusinessIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, state);
         }else{
-            searchRes = tblOrderRepository.findAllByTimeBetweenAndCustomerIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, "订单关闭");
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndCustomerIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, state);
         }
 
         for(TblOrder order: searchRes){
@@ -217,6 +218,7 @@ class orderStatisticEntity{
     private Date endDate;
     private int userId;
     private String userType;
+    private String state;
 }
 
 @Data
