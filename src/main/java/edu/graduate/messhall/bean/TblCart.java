@@ -41,7 +41,7 @@ public class TblCart{
     @Transient
     static private boolean checked = false;
     @Transient
-    private int foodPrice;
+    private double foodPrice;
     @Transient
     private String foodName;
 

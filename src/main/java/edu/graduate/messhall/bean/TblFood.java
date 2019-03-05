@@ -18,7 +18,7 @@ public class TblFood {
     public String foodName;
 
     @Column(nullable = false , length = 11, columnDefinition = "价格")
-    public int foodPrice;
+    public double foodPrice;
 
     /*多对一映射，一个（商家用户多种菜）*/
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
@@ -37,7 +37,7 @@ public class TblFood {
     public TblFood(){
     }
 
-    public TblFood(String foodName, int foodPrice, TblUser belong){
+    public TblFood(String foodName, double foodPrice, TblUser belong){
         this.foodName = foodName;
         this.foodPrice = foodPrice;
         this.belong = belong;
