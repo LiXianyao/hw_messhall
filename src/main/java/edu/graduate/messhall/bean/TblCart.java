@@ -63,9 +63,10 @@ public class TblCart{
     }
 
     public void setCartInfo(){
+        this.getFood().setFoodInfo();
         this.setFoodName(this.getFood().getFoodName());
         this.setFoodPrice(this.getFood().getFoodPrice());
-        this.setBelongName(this.getUser().getUserName());
+        this.setBelongName(this.getFood().getBelongName());
     }
 }
 
