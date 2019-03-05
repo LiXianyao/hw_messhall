@@ -179,9 +179,9 @@ public class orderController {
         if(userType.equals(userTypes[0])){
             searchRes = tblOrderRepository.findAllByOrderByTimeAsc();
         }else if(userType.equals(userTypes[1])){
-            searchRes = tblOrderRepository.findAllByBusinessIdOrderByTimeAsc(userId);
+            searchRes = tblOrderRepository.findAllByBusinessIdOrderByTimeDesc(userId);
         }else{
-            searchRes = tblOrderRepository.findAllByCustomerIdOrderByTimeAsc(userId);
+            searchRes = tblOrderRepository.findAllByCustomerIdOrderByTimeDesc(userId);
         }
 
         for(TblOrder order: searchRes){
@@ -201,11 +201,11 @@ public class orderController {
 
          List<TblOrder> searchRes;
         if(userType.equals(userTypes[0])){
-            searchRes = tblOrderRepository.findAllByTimeBetweenAndStateEqualsOrderByTimeAsc(startDate, endDate, state);
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndStateEqualsOrderByTimeDesc(startDate, endDate, state);
         }else if(userType.equals(userTypes[1])){
-            searchRes = tblOrderRepository.findAllByTimeBetweenAndBusinessIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, state);
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndBusinessIdAndStateEqualsOrderByTimeDesc(startDate, endDate, userId, state);
         }else{
-            searchRes = tblOrderRepository.findAllByTimeBetweenAndCustomerIdAndStateEqualsOrderByTimeAsc(startDate, endDate, userId, state);
+            searchRes = tblOrderRepository.findAllByTimeBetweenAndCustomerIdAndStateEqualsOrderByTimeDesc(startDate, endDate, userId, state);
         }
 
         for(TblOrder order: searchRes){
