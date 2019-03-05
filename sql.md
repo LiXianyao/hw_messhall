@@ -28,10 +28,9 @@ create table tblfood
   comment '餐品信息表';
 
 
-
 create table tblorder
 (
-  orderId    varchar(100)                       not null
+  orderId    int auto_increment
     primary key,
   businessId int                                not null,
   customerId int                                not null,
@@ -47,9 +46,6 @@ create table tblorder
   constraint tblorder_tbluser_userId_fk_2
   foreign key (businessId) references tbluser (userId)
 );
-
-
-
 
 
 create table tblcomment
