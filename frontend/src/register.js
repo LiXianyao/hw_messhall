@@ -38,7 +38,7 @@ class NormalRegisterForm extends React.Component {
                 }
 
                 fetch(
-                    'http://localhost:8080/register',
+                    'http://10.108.113.251:8080/register',
                     init
                 )
                     .then(res => res.json())
@@ -47,7 +47,7 @@ class NormalRegisterForm extends React.Component {
                         var rstate = data["succeed"];
                         var mstr = data["message"];
                         if (rstate) {
-                            alert("注册成功")
+                            alert(mstr)
                             console.log("register succeed!");
                             this.props.history.push("/login")
                         }
@@ -108,8 +108,8 @@ class NormalRegisterForm extends React.Component {
                         ]
                     })(
                         <Radio.Group style={{width:"191px"}}>
-                            <Radio.Button value="1">Male</Radio.Button>
-                            <Radio.Button value="2">Female</Radio.Button>
+                            <Radio.Button value={1}>Male</Radio.Button>
+                            <Radio.Button value={2}>Female</Radio.Button>
                         </Radio.Group>
                     )}
                 </Form.Item>

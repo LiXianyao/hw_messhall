@@ -59,7 +59,7 @@ class Comments extends React.Component {
         }
 
         fetch(
-            'http://localhost:8080/commentAdd',
+            'http://10.108.113.251:8080/commentAdd',
             init
         )
             .then(res => res.json())
@@ -70,6 +70,8 @@ class Comments extends React.Component {
                 if (rstate) {
                     alert("留言发表成功")
                     console.log("comment add succeed!");
+                    this.setState({textvalue:""})
+                    this.getAllComments();
                 }
                 else {
                     alert(mstr)
@@ -107,7 +109,7 @@ class Comments extends React.Component {
         }
 
         fetch(
-            'http://localhost:8080/commentDelete',
+            'http://10.108.113.251:8080/commentDelete',
             init
         )
             .then(res => res.json())
@@ -118,6 +120,7 @@ class Comments extends React.Component {
                 if (rstate) {
                     alert("留言删除成功")
                     console.log("comment delete succeed!");
+                    this.getAllComments();
                 }
                 else {
                     alert(mstr)
@@ -134,7 +137,7 @@ class Comments extends React.Component {
         )
     }
 
-    componentWillMount()
+    getAllComments()
     {
         let initHeaders = new Headers();
         initHeaders.append('Accept', 'application/json, text/plain, */*');
@@ -153,7 +156,7 @@ class Comments extends React.Component {
         }
 
         fetch(
-            'http://localhost:8080/commentQuery',
+            'http://10.108.113.251:8080/commentQuery',
             init
         )
             .then(res => res.json())
@@ -166,6 +169,10 @@ class Comments extends React.Component {
                 )
             })
             .catch(e => console.log('错误:', e))
+    }
+
+    componentWillMount(){
+        this.getAllComments();
     }
 
     render() {
@@ -181,11 +188,11 @@ class Comments extends React.Component {
                     if(this.userType == "admin"){
                         return (<List.Item actions={[<Button icon="delete" shape="circle" onClick={()=>this.handleDelete(item.commentId)}/>]}><p>{item.content}</p></List.Item>)
                     }else{
-                        return (<List.Item><p>{item}</p></List.Item>)
+                        return (<List.Item><p>{item.content}</p></List.Item>)
                     }
                 }}
                 />
-                <TextArea rows={4} style={{top:"20px"}} onChange={this.onChange}/>
+                <TextArea rows={4} style={{top:"20px"}} onChange={this.onChange} value={this.state.textvalue}/>
                 <Button type="primary" onClick={this.handleSubmit} style={{top:"30px",float:"right"}}>提交评论</Button>
             </TemplatePage>
         )

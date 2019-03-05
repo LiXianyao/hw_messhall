@@ -26,7 +26,9 @@ class Order extends React.Component {
           time:"",
           price:"",
           phone:"",
-          orderState:"",
+          state:"",
+          modal:false,
+          delOrder:"",
           data:[
               {
                 orderId:"00001",
@@ -35,7 +37,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"等待接单",
+                state:"等待接单",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -45,7 +47,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"商家已接单",
+                state:"商家已接单",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -55,7 +57,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"备餐完成",
+                state:"备餐完成",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -65,7 +67,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单完成",
+                state:"订单完成",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -75,7 +77,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单关闭",
+                state:"订单关闭",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -85,7 +87,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"等待接单",
+                state:"等待接单",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -95,7 +97,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"商家已接单",
+                state:"商家已接单",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -105,7 +107,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"备餐完成",
+                state:"备餐完成",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -115,7 +117,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单完成",
+                state:"订单完成",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -125,7 +127,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单关闭",
+                state:"订单关闭",
                 content:"米饭*1 麻辣香锅*1"
               },
               {
@@ -135,7 +137,7 @@ class Order extends React.Component {
                 time:"2019-02-18 18:40:33",
                 price:"22",
                 phone:"13333333333",
-                orderState:"订单关闭",
+                state:"订单关闭",
                 content:"米饭*1 麻辣香锅*1"
               }
           ]
@@ -143,7 +145,9 @@ class Order extends React.Component {
       this.handleAdd = this.handleAdd.bind(this);
       this.handleModify = this.handleModify.bind(this);
       this.fs = this.fs.bind(this);
-      this.showConfirm = this.showConfirm.bind(this)
+      this.orderDel = this.orderDel.bind(this);
+      this.showModal = this.showModal.bind(this);
+      this.hideModal = this.hideModal.bind(this);
     }
 
     getColumnSearchProps = (dataIndex) => ({
@@ -213,7 +217,7 @@ class Order extends React.Component {
           time:moment().format("YYYY-MM-DD HH:mm:ss"),
           price:"",
           phone:"",
-          orderState:""
+          state:""
         }
       )
     }
@@ -227,32 +231,25 @@ class Order extends React.Component {
           time:record["time"],
           price:record["price"],
           phone:record["phone"],
-          orderState:record["orderState"]
+          state:record["state"]
         }
       )
     }
 
-    fs(v){
+    fs(v,flag){
       this.setState(
         {
           visible:v,
           time:"",
           price:"",
           phone:"",
-          orderState:""
+          state:""
         }
       )
-    }
-
-    showConfirm() {
-      confirm({
-        title: 'Do you want to delete these items?',
-        content: '确定要删除吗？',
-        onOk() {
-          
-        },
-        onCancel() {},
-      });
+      if(flag == 1)
+      {
+        this.getOrder();
+      }
     }
 
     componentDidMount (){
@@ -260,15 +257,162 @@ class Order extends React.Component {
       const table = tableCon.querySelector('table')
       table.setAttribute('id','table-to-xls')
     }
+
+    getOrder()
+    {
+        let initHeaders = new Headers();
+        initHeaders.append('Accept', 'application/json, text/plain, */*');
+        initHeaders.append('Cache-Control', 'no-cache');
+        initHeaders.append('Content-Type', 'application/json');
+
+        let formData = {};
+        formData['userId'] = this.userId;
+        formData['userType'] = this.userType;
+        console.log(formData);
+        let body = JSON.stringify(formData);
+        console.log(body);
+
+        const init = {
+            method: 'POST',
+            headers: initHeaders,
+            body
+        }
+
+        fetch(
+            'http://10.108.113.251:8080/orderQuery',
+            init
+        )
+            .then(res => res.json())
+            .then(data => {
+                data.forEach((ele)=>{
+                  var foodList = JSON.parse(ele.content);
+                  var foodStr = "";
+                  foodList.forEach((food)=>{
+                    foodStr = foodStr + food.foodName + "*" + food.foodNum + " ";
+                  })
+                  ele.content = foodStr;
+                  console.log(ele.time);
+                  ele.time = moment(ele.time).utcOffset(0).format("YYYY-MM-DD HH:mm:ss");
+                })
+                this.setState({
+                  data:data
+                })
+            })
+            .catch(e => console.log('错误:', e))
+    }
+
+    componentWillMount()
+    {
+      this.getOrder();
+    }
+
+    hideModal()
+    {
+      this.setState(
+        {
+          modal:false
+        }
+      )
+    }
+
+    showModal(oid)
+    {
+      this.setState(
+        {
+          delOrder:oid,
+          modal:true
+        }
+      )
+    }
+
+    orderDel()
+    {
+      let initHeaders = new Headers();
+      initHeaders.append('Accept', 'application/json, text/plain, */*');
+      initHeaders.append('Cache-Control', 'no-cache');
+      initHeaders.append('Content-Type', 'application/json');
+
+      let formData = {};
+      formData['orderId'] = this.state.delOrder;
+      console.log(formData);
+      let body = JSON.stringify(formData);
+      console.log(body);
+
+      const init = {
+          method: 'POST',
+          headers: initHeaders,
+          body
+      }
+
+      fetch(
+          'http://10.108.113.251:8080/orderDel',
+          init
+      )
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            var rstate = data["succeed"];
+            var mstr = data["message"];
+            if (rstate) {
+                alert("订单删除成功")
+                console.log("order delete succeed!");
+                this.hideModal();
+                this.getOrder();
+            }
+            else {
+                alert(mstr)
+            }
+          })
+          .catch(e => console.log('错误:', e))
+    }
+
+    stateChange(oid,price,phone,state){
+      let initHeaders = new Headers();
+      initHeaders.append('Accept', 'application/json, text/plain, */*');
+      initHeaders.append('Cache-Control', 'no-cache');
+      initHeaders.append('Content-Type', 'application/json');
+
+      let formData = {};
+      
+      formData['orderId'] = oid;
+      formData['price'] = price;
+      formData['phone'] = phone;
+      formData['state'] = state;
+      console.log(formData);
+      let body = JSON.stringify(formData);
+      console.log(body);
+
+      const init = {
+          method: 'POST',
+          headers: initHeaders,
+          body
+      }
+
+      fetch(
+          'http://10.108.113.251:8080/orderModify',
+          init
+      )
+          .then(res => res.json())
+          .then(data => {
+              console.log(data);
+              var rstate = data["succeed"];
+              var mstr = data["message"];
+              if (rstate) {
+                  alert("订单状态已变更")
+                  console.log("state change succeed!");
+                  this.getOrder();
+              }
+              else {
+                  alert(mstr)
+              }
+          })
+          .catch(e => console.log('错误:', e))
+    }
   
   
   
     render() {
         const columns = [
-            {
-                title: "订单ID",
-                dataIndex: "orderId",
-            },
             {
                 title: "消费者名称",
                 dataIndex: "customerName",
@@ -296,41 +440,41 @@ class Order extends React.Component {
             },
             {
                 title: "订单状态",
-                dataIndex: "orderState",
-                ...this.getColumnSearchProps('orderState')
+                dataIndex: "state",
+                ...this.getColumnSearchProps('state')
             },
             {
                 title: 'Action',
                 dataIndex: 'action',
                 render: (text,record) => {
-                  if(this.userType == "business" && record['orderState'] == "等待接单"){
+                  if(this.userType == "business" && record['state'] == "等待接单"){
                     return <span>
-                    <Button type="primary">接单</Button>
+                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"商家已接单")}>接单</Button>
                     <Divider type="vertical" />
-                    <Button>退单</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭")}>退单</Button>
                     </span>
-                  }else if(this.userType == "customer" && record['orderState'] == "等待接单"){
+                  }else if(this.userType == "customer" && record['state'] == "等待接单"){
                     return <span>
-                    <Button>取消订单</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单关闭")}>取消订单</Button>
                     </span>
                   }
-                  else if(this.userType == "business" && record['orderState'] == "商家已接单"){
+                  else if(this.userType == "business" && record['state'] == "商家已接单"){
                     return <span>
-                    <Button>备餐完成</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"备餐完成")}>备餐完成</Button>
                     </span>
-                  }else if(this.userType == "customer" && record['orderState'] =="备餐完成"){
+                  }else if(this.userType == "customer" && record['state'] =="备餐完成"){
                     return <span>
-                    <Button type="primary">取餐确认</Button>
+                    <Button type="primary" onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成")}>取餐确认</Button>
                     </span>
-                  }else if(this.userType == "customer" && record['orderState'] =="商家已接单"){
+                  }else if(this.userType == "customer" && record['state'] =="商家已接单"){
                     return <span>
-                    <Button >取餐确认</Button>
+                    <Button onClick={this.stateChange.bind(this,record.orderId,record.price,record.phone,"订单完成")}>取餐确认</Button>
                     </span>
                   }else if(this.userType == "admin"){
                     return <span>
                     <Button  onClick={this.handleModify.bind(this,record)}>修改</Button>
                     <Divider type="vertical" />
-                    <Button onClick={this.showConfirm}>删除</Button>
+                    <Button onClick={this.showModal.bind(this,record.orderId)}>删除</Button>
                     </span>
                   }
                 }
@@ -357,8 +501,19 @@ class Order extends React.Component {
             buttonText="Download as XLS"/>
           </div>
           <Table ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
-          <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} orderState={this.state.orderState} fromSon={this.fs}>
+          <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} state={this.state.state} fromSon={this.fs}>
           </OrderForm>
+          <Modal
+            title="Do you want to delete this food?"
+            visible={this.state.modal}
+            onOk={this.orderDel}
+            onCancel={this.hideModal}
+            okText="确认"
+            okType="danger"
+            cancelText="取消"
+          >
+          <p>确定删除此订单吗？</p>
+          </Modal>
         </TemplatePage>
       );
     }

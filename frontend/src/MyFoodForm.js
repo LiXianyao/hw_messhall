@@ -7,10 +7,6 @@ class MyFoodForm extends React.Component {
         super(props);
         this.state = {
             visible:false,
-            userId:"",
-            foodId:"",
-            foodName:"",
-            foodPrice:""
         } 
         this.handleClose = this.handleClose.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -18,7 +14,7 @@ class MyFoodForm extends React.Component {
 
     handleClose()
     {
-        this.props.fromSon(false);
+        this.props.fromSon(false,0);
         this.setState(
             {
                 visible:false
@@ -26,13 +22,74 @@ class MyFoodForm extends React.Component {
         )
     }
 
-    handleSubmit()
-    {
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let initHeaders = new Headers();
+                initHeaders.append('Accept', 'application/json, text/plain, */*');
+                initHeaders.append('Cache-Control', 'no-cache');
+                initHeaders.append('Content-Type', 'application/json');
 
+                var url;
+                let formData = {};
+                if(this.props.operation == "增加")
+                {
+                    url = 'http://10.108.113.251:8080/foodAdd';
+                    if(this.props.userType == "admin"){
+                        formData['belongId'] = values.belongId;
+                    }else{
+                        formData['belongId'] = this.props.userId;
+                    }
+                    
+                }else{
+                    url = 'http://10.108.113.251:8080/foodModify'; 
+                    formData['foodId'] = this.props.foodId;
+                }
+                
+                formData['foodName'] = values.foodName;
+                formData['foodPrice'] = values.foodPrice;
+                console.log(formData);
+                let body = JSON.stringify(formData);
+                console.log(body);
+
+                const init = {
+                    method: 'POST',
+                    headers: initHeaders,
+                    body
+                }
+
+                fetch(
+                    url,
+                    init
+                )
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        var rstate = data["succeed"];
+                        var mstr = data["message"];
+                        if (rstate) {
+                            alert("操作成功")
+                            console.log("modify or add succeed!");
+                            this.props.fromSon(false,1);
+                            this.setState(
+                                {
+                                    visible:false
+                                }
+                            ) 
+                        }
+                        else {
+                            alert(mstr)
+                        }
+                    })
+                    .catch(e => console.log('错误:', e))
+            }
+        });
     }
 
     componentWillMount()
     {
+        console.log("mount")
         /*
         this.setState(
             {
@@ -44,12 +101,13 @@ class MyFoodForm extends React.Component {
             },()=>{
                 console.log("!!!")
             }
-        )*/
+        )
+        */
     }
 
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator,setFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 },
@@ -58,16 +116,17 @@ class MyFoodForm extends React.Component {
         var foodPrice = this.props.foodPrice
         var userName =  this.props.userName
         var userIdInput
-        if(this.props.userType == "admin")
+        console.log("render!!!!")
+        console.log(foodName)
+        if(this.props.userType == "admin" && this.props.operation == "增加")
         {
             userIdInput = (<Form.Item label="所属商家" {...formItemLayout}>
-            {getFieldDecorator('userName', {
+            {getFieldDecorator('belongId', {
                 rules: [
-                    { required: true, pattern:/^\d+$/, message: 'Please input the userId!'}
-                ],
-                initialValue: userName
+                    { required: true, message: 'Please input the userId!'}
+                ]
             })(
-                <Input className="userName"   placeholder="userName" />
+                <Input className="belongId"   placeholder="belongId" />
             )}
              </Form.Item>);
         }
@@ -89,7 +148,8 @@ class MyFoodForm extends React.Component {
                     {getFieldDecorator('foodName', {
                         rules: [{ required: true, message: 'Please input your foodName!' }],
                         initialValue: foodName
-                    })(
+                    })
+                    (
                         <Input className="foodName"   placeholder="foodName" />
                     )}
                 </Form.Item>
@@ -105,7 +165,7 @@ class MyFoodForm extends React.Component {
                 </Form.Item>
                 {userIdInput}
                 <Button className="food-form-no" onClick={this.handleClose}>取消</Button>
-                <Button type="primary" className="food-form-yes" onClick={this.handleClose}>提交</Button>
+                <Button type="primary" className="food-form-yes" htmlType='submit'>提交</Button>
             </Form>
           </Drawer>
         );
