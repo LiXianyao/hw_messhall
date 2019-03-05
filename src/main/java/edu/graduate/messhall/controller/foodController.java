@@ -26,7 +26,7 @@ public class foodController {
     @RequestMapping(value = "/foodAdd", method = {RequestMethod.POST})
     public responseObject addFoodRequest(@RequestBody foodAddEntity entity){
         String foodName = entity.getFoodName();
-        int foodPrice = entity.getFoodPrice();
+        double foodPrice = entity.getFoodPrice();
         int belongId = entity.getBelongId();
         log.info("添加食品请求：" + foodName + belongId);
 
@@ -39,6 +39,7 @@ public class foodController {
                 response = new responseObject(true,"餐品添加成功！！");
             }
             catch (Exception e){
+                log.error(e.getMessage());
                 response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
             }
         }
@@ -52,7 +53,7 @@ public class foodController {
     @RequestMapping(value = "/foodModify", method = {RequestMethod.POST})
     public responseObject modifyFoodRequest(@RequestBody foodModifyEntity entity){
         String foodName = entity.getFoodName();
-        int foodPrice = entity.getFoodPrice();
+        double foodPrice = entity.getFoodPrice();
         int foodId = entity.getFoodId();
 
         TblFood searchRes = tblFoodRepository.findByFoodId(foodId);
@@ -66,6 +67,7 @@ public class foodController {
                 response = new responseObject(true,"餐品修改成功！！");
             }
             catch (Exception e){
+                log.error(e.getMessage());
                 response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
             }
         }
@@ -89,6 +91,7 @@ public class foodController {
                 response = new responseObject(true,"餐品删除成功！！");
             }
             catch (Exception e){
+                log.error(e.getMessage());
                 response = new responseObject(false,"数据保存异常，操作失败，请重试或联系管理员检查数据库");
             }
         }
@@ -122,14 +125,14 @@ public class foodController {
 @Data
 class foodAddEntity{
     private String foodName;
-    private int foodPrice;
+    private double foodPrice;
     private int belongId;
 }
 
 @Data
 class foodModifyEntity{
     private String foodName;
-    private int foodPrice;
+    private double foodPrice;
     private int foodId;
 }
 
