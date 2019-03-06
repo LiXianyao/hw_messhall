@@ -47,6 +47,7 @@ xxx是依赖包名字
 + react-router-dom
 + react-html-table-to-excel
 + react-highlight-words 
++ react-cookies
 
 如果之后npm start还有报错提示缺的包也用同一方法安装  
 
