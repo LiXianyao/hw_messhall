@@ -65,6 +65,7 @@ class NormalLoginForm extends React.Component {
             const init = {
                 method: 'POST',
                 headers: initHeaders,
+                credentials:"include",
                 body
             }
 

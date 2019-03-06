@@ -1,4 +1,5 @@
 import { Table,Input, Button, Icon, Divider,Modal } from 'antd';
+import {withRouter} from 'react-router'
 import Highlighter from 'react-highlight-words';
 import React from 'react';
 import TemplatePage from './template'
@@ -142,9 +143,6 @@ class Order extends React.Component {
     }
 
     componentDidMount (){
-      const tableCon = ReactDOM.findDOMNode(this.refs['table'])
-      const table = tableCon.querySelector('table')
-      table.setAttribute('id','table-to-xls')
     }
 
     getOrder()
@@ -164,6 +162,7 @@ class Order extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -173,6 +172,10 @@ class Order extends React.Component {
         )
             .then(res => res.json())
             .then(data => {
+                if(data["loginRequired"] == -1){
+                  alert("请先登录")
+                  this.props.history.push("/login")
+                }
                 data.forEach((ele)=>{
                   var foodList = JSON.parse(ele.content);
                   var foodStr = "";
@@ -229,6 +232,7 @@ class Order extends React.Component {
       const init = {
           method: 'POST',
           headers: initHeaders,
+          credentials:"include",
           body
       }
 
@@ -270,6 +274,7 @@ class Order extends React.Component {
       const init = {
           method: 'POST',
           headers: initHeaders,
+          credentials:"include",
           body
       }
 
@@ -309,6 +314,7 @@ class Order extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -419,21 +425,11 @@ class Order extends React.Component {
         
       return (
         <TemplatePage userType={this.userType} userId={this.userId} siderValue={this.siderValue}>
-          <div style={{height:"40px"}}>
-            <ReactHTMLTableToExcel
-            id="test-table-xls-button"
-            className="download-table-xls-button"
-            table="table-to-xls"
-            filename="订单表格"
-            sheet="ordertablexls"
-            ref="DownloadButton"
-            buttonText="导出表格"/>
-          </div>
-          <Table pagination={{ pageSize: 20 }} ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
+          <Table pagination={{pageSize:20}} ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
           <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} state={this.state.state} fromSon={this.fs}>
           </OrderForm>
           <Modal
-            title="Do you want to delete this food?"
+            title="提示"
             visible={this.state.modal}
             onOk={this.orderDel}
             onCancel={this.hideModal}
@@ -448,5 +444,5 @@ class Order extends React.Component {
     }
   }
 
-export default Order;
+export default withRouter(Order);
 

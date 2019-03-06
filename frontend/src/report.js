@@ -1,4 +1,5 @@
-import { Table,Input, Button, Icon, DatePicker } from 'antd';
+import { Table,Input, Button, Icon, DatePicker, Modal, Card, Row, Col } from 'antd';
+import {withRouter} from 'react-router'
 import Highlighter from 'react-highlight-words';
 import React from 'react';
 import TemplatePage from './template'
@@ -17,19 +18,43 @@ class Report extends React.Component {
       this.userId = this.props.match.params.id
       this.siderValue = ["report"]
       this.state = {
-          startDate:"",
-          endDate:"",
-          data:[]
+          startDate:moment().utcOffset(8).format("YYYY-MM-DDTHH:mm:ss"),
+          endDate:moment().utcOffset(8).format("YYYY-MM-DDTHH:mm:ss"),
+          data:[],
+          foodSale:[],
+          sortFood:[],
+          modal:false,
+          sum:0
       };
     }
 
     onChange = (date, dateString) => {
-      console.log(dateString[0]);
-      console.log(dateString[1]);
+      console.log(date)
+      console.log(dateString)
+      var start = moment(date[0]).utcOffset(8).startOf('day').format("YYYY-MM-DDTHH:mm:ss")
+      var end = moment(date[1]).utcOffset(8).endOf('day').format("YYYY-MM-DDTHH:mm:ss")
       this.setState({
-        startDate:dateString[0],
-        endDate:dateString[1]
+        startDate:start,
+        endDate:end
       })
+    }
+
+    hideModal = () =>
+    {
+      this.setState(
+        {
+          modal:false
+        }
+      )
+    }
+
+    showModal = () =>
+    {
+      this.setState(
+        {
+          modal:true
+        }
+      )
     }
 
     getColumnSearchProps = (dataIndex) => ({
@@ -96,7 +121,7 @@ class Report extends React.Component {
       table.setAttribute('id','table-to-xls')
     }
 
-    getOrder = () =>
+    getOrder = (flag) =>
     {
         let initHeaders = new Headers();
         initHeaders.append('Accept', 'application/json, text/plain, */*');
@@ -116,6 +141,7 @@ class Report extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -125,25 +151,46 @@ class Report extends React.Component {
         )
             .then(res => res.json())
             .then(data => {
-                console.log(data)
-                data.forEach((ele)=>{
-                  var foodList = JSON.parse(ele.content);
-                  var foodStr = "";
-                  foodList.forEach((food)=>{
-                    foodStr = foodStr + food.foodName + "*" + food.foodNum + " ";
+                if(data["loginRequired"] == -1){
+                  alert("请先登录")
+                  this.props.history.push("/login")
+                }
+                if(flag){
+                  var foodSale=[];
+                  var sum=0;
+                  data.forEach((ele)=>{
+                    var foodList = JSON.parse(ele.content);
+                    var foodStr = "";
+                    foodList.forEach((food)=>{
+                      foodStr = foodStr + food.foodName + "*" + food.foodNum + " ";
+                      if(foodSale[food.foodName] >= 1){
+                        foodSale[food.foodName] = foodSale[food.foodName] + food.foodNum;
+                      }else{
+                        foodSale[food.foodName] = 1;
+                      }
+                    })
+                    ele.content = foodStr;
+                    ele.time = moment(ele.time).utcOffset(0).format("YYYY-MM-DD HH:mm:ss");
+                    sum = sum + ele.price;
                   })
-                  ele.content = foodStr;
-                  ele.time = moment(ele.time).utcOffset(0).format("YYYY-MM-DD HH:mm:ss");
-                })
-                this.setState({
-                  data:data
-                })
+                  var sortFood = Object.keys(foodSale).sort(function(a,b){ return foodSale[b]-foodSale[a]; })
+                  console.log(sortFood);
+                  console.log(foodSale);
+                  this.setState({
+                    data:data,
+                    sortFood:sortFood,
+                    foodSale:foodSale,
+                    sum:sum
+                  })
+                }
+
             })
             .catch(e => console.log('错误:', e))
     }
 
     componentWillMount()
     {
+      this.getOrder(0);
     } 
   
   
@@ -186,10 +233,24 @@ class Report extends React.Component {
           }
         ];
 
+        var showList = [];
+        for(var key in this.state.sortFood){
+          var food = this.state.sortFood[key];
+          var num = this.state.foodSale[food];
+          showList.push(<dt key={key}>
+                    <Card style={{ width: "100%"}}>
+                        <Row type="flex" justify="space-between">
+                            <Col span={16}>{food}</Col>
+                            <Col span={8}>{num}</Col>
+                        </Row>
+                    </ Card>
+                    </dt>)
+        }
+
       return (
         <TemplatePage userType={this.userType} userId={this.userId} siderValue={this.siderValue}>
           <RangePicker onChange={this.onChange} />
-          <Button type="primary" onClick={this.getOrder}>订单查询</Button>
+          <Button type="primary" onClick={this.getOrder.bind(this,1)}>订单查询</Button>
           <div style={{height:"40px"}}>
             <ReactHTMLTableToExcel
             id="test-table-xls-button"
@@ -201,10 +262,22 @@ class Report extends React.Component {
             buttonText="导出表格"/>
           </div>
           <Table pagination={false} ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
+          <Modal
+            title="餐品数量统计表"
+            visible={this.state.modal}
+            onOk={this.hideModal}
+            onCancel={this.hideModal}
+            okText="确认"
+            cancelText="取消"
+          >
+          <dl>{showList}</dl>
+          </Modal>
+          <Button style={{margin:'10px',float:'left'}} onClick={this.showModal}><Icon type="plus"/>餐品数量统计表</Button>
+          <div className="G_Price" style={{margin:'10px',float:'right'}}><h3>总金额：{this.state.sum} 元</h3></div>
         </TemplatePage>
       );
     }
   }
 
-export default Report;
+export default withRouter(Report);
 

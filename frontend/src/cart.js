@@ -1,4 +1,5 @@
 import {List,Input,Button, Row, Col, Checkbox, Card} from 'antd';
+import {withRouter} from 'react-router'
 import React from 'react';
 import TemplatePage from './template';
 
@@ -31,6 +32,7 @@ class MyCart extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -40,6 +42,10 @@ class MyCart extends React.Component {
         )
             .then(res => res.json())
             .then(data => {
+                if(data["loginRequired"] == -1){
+                    alert("请先登录")
+                    this.props.history.push("/login")
+                }
                 data.forEach((ele)=>{
                     ele["checked"]=false;
                 })
@@ -71,6 +77,7 @@ class MyCart extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -110,6 +117,7 @@ class MyCart extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -297,6 +305,7 @@ class MyCart extends React.Component {
         const init = {
             method: 'POST',
             headers: initHeaders,
+            credentials:"include",
             body
         }
 
@@ -359,4 +368,4 @@ class MyCart extends React.Component {
         )   
     }
 }
-export default MyCart;
+export default withRouter(MyCart);
