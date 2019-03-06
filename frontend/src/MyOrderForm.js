@@ -54,7 +54,7 @@ class MyOrderForm extends React.Component {
                 }
 
                 fetch(
-                    'http://10.108.113.251:8080/orderModify',
+                    'http://localhost:8080/orderModify',
                     init
                 )
                     .then(res => res.json())

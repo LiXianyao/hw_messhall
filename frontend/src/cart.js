@@ -1,14 +1,15 @@
 import {List,Input,Button, Row, Col, Checkbox, Card} from 'antd';
 import {withRouter} from 'react-router'
 import React from 'react';
+import cookie from 'react-cookies'
 import TemplatePage from './template';
 
 
 class MyCart extends React.Component {
     constructor(props) {
         super(props);
-        this.userType = this.props.match.params.type
-        this.userId = this.props.match.params.id
+        this.userType = cookie.load("userType")
+        this.userId = cookie.load("userId")
         this.siderValue = ["cart"]
         this.state={
           arr:[],
@@ -37,13 +38,12 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/cartQuery',
+            'http://localhost:8080/cartQuery',
             init
         )
             .then(res => res.json())
             .then(data => {
                 if(data["loginRequired"] == -1){
-                    alert("请先登录")
                     this.props.history.push("/login")
                 }
                 data.forEach((ele)=>{
@@ -82,7 +82,7 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/cartModify',
+            'http://localhost:8080/cartModify',
             init
         )
             .then(res => res.json())
@@ -122,7 +122,7 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/cartDel',
+            'http://localhost:8080/cartDel',
             init
         )
             .then(res => res.json())
@@ -142,6 +142,10 @@ class MyCart extends React.Component {
 
     //获取数据
     componentWillMount(){
+        if(this.userId == undefined){
+            alert("请先登录")
+            this.props.history.push("/login")
+        }
         this.getCart();
     }
     //获取输入框的值
@@ -281,7 +285,7 @@ class MyCart extends React.Component {
             }
         })
         this.setState({
-            sum_price:sum
+            sum_price:sum.toFixed(2)
         })
     }
     //结算传值
@@ -310,7 +314,7 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/orderAdd',
+            'http://localhost:8080/orderAdd',
             init
         )
             .then(res => res.json())
@@ -351,9 +355,9 @@ class MyCart extends React.Component {
                             <Col span={2}><input type="checkbox" checked={ele.checked} onChange={(e)=>{this.CheckAllorNoAll(e,index)}}/></Col>
                             <Col span={4}>{ele.foodName}</Col>
                             <Col span={4}>{ele.belongName}</Col>
-                            <Col span={3}>单价:{ele.foodPrice}</Col>
+                            <Col span={3}>单价:{ele.foodPrice.toFixed(2)}</Col>
                             <Col span={6}><Button icon="minus" onClick={(e)=>{this.reduce(e,index)}}/><Input type="text" onChange={(e)=>this.getInputText(e,index)} value={ele.foodNum} style={{ width: "50px"}}/><Button icon="plus" onClick={(e)=>{this.augment(e,index)}}/></Col>
-                            <Col span={3}>小计:{ele.foodNum * ele.foodPrice}</Col>
+                            <Col span={3}>小计:{(ele.foodNum * ele.foodPrice).toFixed(2)}</Col>
                             <Col span={2}><Button icon="delete" shape="circle" onClick={(e)=>{this.del(e,index)}}/></Col>
                         </Row>
                     </ Card>

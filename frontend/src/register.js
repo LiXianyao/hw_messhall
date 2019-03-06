@@ -39,7 +39,7 @@ class NormalRegisterForm extends React.Component {
                 }
 
                 fetch(
-                    'http://10.108.113.251:8080/register',
+                    'http://localhost:8080/register',
                     init
                 )
                     .then(res => res.json())

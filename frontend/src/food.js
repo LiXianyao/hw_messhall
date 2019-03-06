@@ -6,6 +6,7 @@ import TemplatePage from './template'
 import FoodForm from './MyFoodForm';
 import ReactDOM from 'react-dom';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
+import cookie from 'react-cookies'
 import "./index.css"
 
 const confirm = Modal.confirm;
@@ -14,8 +15,8 @@ class Food extends React.Component {
     constructor(props) {
       super(props);
       // 设置 initial state
-      this.userType = this.props.match.params.type
-      this.userId = this.props.match.params.id
+      this.userType = cookie.load("userType")
+      this.userId = cookie.load("userId")
       this.siderValue = ["food"]
       this.state = {
           //operationButton:[],
@@ -161,16 +162,17 @@ class Food extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/foodQuery',
+            'http://localhost:8080/foodQuery',
             init
         )
             .then(res => res.json())
             .then(data => {
                 if(data["loginRequired"] == -1){
-                    alert("请先登录")
                     this.props.history.push("/login")
                 }
-                console.log(data);
+                data.forEach((ele)=>{
+                  ele.foodPrice = ele.foodPrice.toFixed(2);
+                })
                 this.setState(
                     {
                         data:data
@@ -201,7 +203,7 @@ class Food extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/cartAdd',
+          'http://localhost:8080/cartAdd',
           init
       )
           .then(res => res.json())
@@ -260,7 +262,7 @@ class Food extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/foodDelete',
+          'http://localhost:8080/foodDelete',
           init
       )
           .then(res => res.json())
@@ -289,6 +291,10 @@ class Food extends React.Component {
 
     componentWillMount()
     {
+      if(this.userId == undefined){
+        alert("请先登录")
+        this.props.history.push("/login")
+      }
       this.getAllFood();
     }
   
@@ -341,6 +347,7 @@ class Food extends React.Component {
                          <Icon type="plus" /> 增加餐品
                        </Button>
         }
+        var theDrawer = this.state.visible;
         
       return (
         <TemplatePage userType={this.userType} userId={this.userId} siderValue={this.siderValue}>
@@ -355,8 +362,8 @@ class Food extends React.Component {
             buttonText="导出表格"/>
           </div>
           <Table pagination= {false} ref="table" rowKey='foodId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} />
-          <FoodForm visible={this.state.visible} operation={this.state.operation} userId={this.userId} userName={this.state.userName} foodId={this.state.foodId} foodName={this.state.foodName} foodPrice={this.state.foodPrice} fromSon={this.fs} userType={this.userType}>
-          </FoodForm>
+          {theDrawer && <FoodForm visible={this.state.visible} operation={this.state.operation} userId={this.userId} userName={this.state.userName} foodId={this.state.foodId} foodName={this.state.foodName} foodPrice={this.state.foodPrice} fromSon={this.fs} userType={this.userType}>
+          </FoodForm>}
           {addButton}
           <Modal
             title="提示"

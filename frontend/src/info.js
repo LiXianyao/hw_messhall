@@ -2,13 +2,14 @@ import {Radio, Form, Icon, Input, Button} from 'antd';
 import {withRouter} from 'react-router'
 import React from 'react';
 import TemplatePage from './template'
+import cookie from 'react-cookies'
 import './index.css'
 
 class MyInfoForm extends React.Component {
     constructor(props) {
         super(props);
-        this.userType = this.props.match.params.type
-        this.userId = this.props.match.params.id
+        this.userType = cookie.load("userType")
+        this.userId = cookie.load("userId")
         this.siderValue = ["info"]
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
@@ -46,7 +47,7 @@ class MyInfoForm extends React.Component {
                 }
 
                 fetch(
-                    'http://10.108.113.251:8080/infoModify',
+                    'http://localhost:8080/infoModify',
                     init
                 )
                     .then(res => res.json())
@@ -89,13 +90,12 @@ class MyInfoForm extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/infoQuery',
+            'http://localhost:8080/infoQuery',
             init
         )
             .then(res => res.json())
             .then(data => {
                 if(data["loginRequired"] == -1){
-                    alert("请先登录")
                     this.props.history.push("/login")
                 }
                 console.log(data);
@@ -113,6 +113,10 @@ class MyInfoForm extends React.Component {
 
     componentWillMount()
     {
+        if(this.userId == undefined){
+            alert("请先登录")
+            this.props.history.push("/login")
+        }
         this.getInfo();
     }
 

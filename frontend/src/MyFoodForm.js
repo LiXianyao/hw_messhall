@@ -35,7 +35,7 @@ class MyFoodForm extends React.Component {
                 let formData = {};
                 if(this.props.operation == "增加")
                 {
-                    url = 'http://10.108.113.251:8080/foodAdd';
+                    url = 'http://localhost:8080/foodAdd';
                     if(this.props.userType == "admin"){
                         formData['belongId'] = values.belongId;
                     }else{
@@ -43,7 +43,7 @@ class MyFoodForm extends React.Component {
                     }
                     
                 }else{
-                    url = 'http://10.108.113.251:8080/foodModify'; 
+                    url = 'http://localhost:8080/foodModify'; 
                     formData['foodId'] = this.props.foodId;
                 }
                 

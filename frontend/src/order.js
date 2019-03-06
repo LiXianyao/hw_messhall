@@ -5,8 +5,7 @@ import React from 'react';
 import TemplatePage from './template'
 import OrderForm from './MyOrderForm';
 import moment from 'moment'
-import ReactDOM from 'react-dom';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel'
+import cookie from 'react-cookies'
 import "./index.css"
 
 const confirm = Modal.confirm;
@@ -15,8 +14,8 @@ class Order extends React.Component {
     constructor(props) {
       super(props);
       // 设置 initial state
-      this.userType = this.props.match.params.type
-      this.userId = this.props.match.params.id
+      this.userType = cookie.load("userType")
+      this.userId = cookie.load("userId")
       this.siderValue = ["order"]
       this.state = {
           //operationButton:[],
@@ -167,13 +166,12 @@ class Order extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/orderQuery',
+            'http://localhost:8080/orderQuery',
             init
         )
             .then(res => res.json())
             .then(data => {
                 if(data["loginRequired"] == -1){
-                  alert("请先登录")
                   this.props.history.push("/login")
                 }
                 data.forEach((ele)=>{
@@ -184,6 +182,7 @@ class Order extends React.Component {
                   })
                   ele.content = foodStr;
                   ele.time = moment(ele.time).utcOffset(0).format("YYYY-MM-DD HH:mm:ss");
+                  ele.price = ele.price.toFixed(2);
                 })
                 this.setState({
                   data:data
@@ -194,6 +193,10 @@ class Order extends React.Component {
 
     componentWillMount()
     {
+      if(this.userId == undefined){
+        alert("请先登录")
+        this.props.history.push("/login")
+      }
       this.getOrder();
     }
 
@@ -237,7 +240,7 @@ class Order extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/orderDel',
+          'http://localhost:8080/orderDel',
           init
       )
           .then(res => res.json())
@@ -279,7 +282,7 @@ class Order extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/orderCheck',
+          'http://localhost:8080/orderCheck',
           init
       )
           .then(res => res.json())
@@ -319,7 +322,7 @@ class Order extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/orderModify',
+            'http://localhost:8080/orderModify',
             init
         )
             .then(res => res.json())
@@ -422,12 +425,13 @@ class Order extends React.Component {
                          <Icon type="plus" /> 增加订单
                        </Button>
         }
+        var theDrawer = this.state.visible;
         
       return (
         <TemplatePage userType={this.userType} userId={this.userId} siderValue={this.siderValue}>
           <Table pagination={{pageSize:20}} ref="table" rowKey='orderId' columns={columns} dataSource={this.state.data} bordered onChange={this.handleChange} expandedRowRender={record => <p style={{ margin: 0 }}>{record.content}</p>}/>
-          <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} state={this.state.state} fromSon={this.fs}>
-          </OrderForm>
+          {theDrawer && <OrderForm visible={this.state.visible} operation={this.state.operation} orderId={this.state.orderId} time={this.state.time} price={this.state.price} phone={this.state.phone} state={this.state.state} fromSon={this.fs}>
+          </OrderForm>}
           <Modal
             title="提示"
             visible={this.state.modal}
