@@ -54,11 +54,7 @@ xxx是依赖包名字
 >npm start
 
 Compiled with warning后  
-打开浏览器访问下列网址即可看到各个界面
->http://localhost:3000/login  
->http://localhost:3000/food/admin/0  
->http://localhost:3000/food/business/0  
->http://localhost:3000/food/customer/0
+打开浏览器访问网址
+>http://localhost:3000/  
 
-在admin business 和 customer 页面下可以感受到权限的区分  
-餐品列表界面food，购物车页面cart,订单列表界面order，留言板界面comments，我的资料界面info。  
+  

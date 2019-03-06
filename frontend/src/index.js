@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Switch, BrowserRouter, Route} from 'react-router-dom'
+import { Switch, BrowserRouter, Route, Redirect} from 'react-router-dom'
 import * as serviceWorker from './serviceWorker';
 import WrappedNormalLoginForm from './login'
 import WrappedNormalRegisterForm from './register'
@@ -25,6 +25,9 @@ ReactDOM.render(
       <div>
         <LocaleProvider locale={zh_CN}>
         <Switch>
+          <Route path='/' exact render={()=> (
+               <Redirect to='/login'/>
+          )}/>
           <Route path='/login' component={WrappedNormalLoginForm} />
           <Route path='/register' component={WrappedNormalRegisterForm} />
           <Route path='/food/:type/:id' component={Food} />
