@@ -13,20 +13,20 @@ create table tbluser
   comment '用户信息表';
 
 
-
 create table tblfood
 (
   foodId    int auto_increment
     primary key,
   foodName  varchar(100) not null,
-  foodPrice int          not null,
-  belongId  int          not null comment '餐品所属商家',
+  foodPrice double       not null,
+  belongId  int          not null
+  comment '餐品所属商家',
   constraint tblfood_tbluser_userId_fk
-    foreign key (belongId) references tbluser (userId)
-      on update cascade on delete cascade
+  foreign key (belongId) references tbluser (userId)
+    on update cascade
+    on delete cascade
 )
   comment '餐品信息表';
-
 
 create table tblorder
 (
@@ -35,7 +35,7 @@ create table tblorder
   businessId int                                not null,
   customerId int                                not null,
   time       datetime default CURRENT_TIMESTAMP not null,
-  price      int default '0'                    not null,
+  price      double(8, 2) default '0.00'        not null,
   phone      varchar(100)                       not null,
   state      varchar(20) default '未支付'          not null,
   content    varchar(512)                       not null,
@@ -70,12 +70,3 @@ create table tblcart
   foreign key (userId) references tbluser (userId)
     on delete cascade
 );
-
-
-
-
-
-
-
-
-
