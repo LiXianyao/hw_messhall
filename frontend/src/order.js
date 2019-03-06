@@ -166,7 +166,7 @@ class Order extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/orderQuery',
+            'http://localhost:8080/orderQuery',
             init
         )
             .then(res => res.json())
@@ -240,7 +240,7 @@ class Order extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/orderDel',
+          'http://localhost:8080/orderDel',
           init
       )
           .then(res => res.json())
@@ -282,7 +282,7 @@ class Order extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/orderCheck',
+          'http://localhost:8080/orderCheck',
           init
       )
           .then(res => res.json())
@@ -322,7 +322,7 @@ class Order extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/orderModify',
+            'http://localhost:8080/orderModify',
             init
         )
             .then(res => res.json())

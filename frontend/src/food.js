@@ -162,7 +162,7 @@ class Food extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/foodQuery',
+            'http://localhost:8080/foodQuery',
             init
         )
             .then(res => res.json())
@@ -203,7 +203,7 @@ class Food extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/cartAdd',
+          'http://localhost:8080/cartAdd',
           init
       )
           .then(res => res.json())
@@ -262,7 +262,7 @@ class Food extends React.Component {
       }
 
       fetch(
-          'http://10.108.113.251:8080/foodDelete',
+          'http://localhost:8080/foodDelete',
           init
       )
           .then(res => res.json())

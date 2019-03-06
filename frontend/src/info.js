@@ -47,7 +47,7 @@ class MyInfoForm extends React.Component {
                 }
 
                 fetch(
-                    'http://10.108.113.251:8080/infoModify',
+                    'http://localhost:8080/infoModify',
                     init
                 )
                     .then(res => res.json())
@@ -90,7 +90,7 @@ class MyInfoForm extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/infoQuery',
+            'http://localhost:8080/infoQuery',
             init
         )
             .then(res => res.json())

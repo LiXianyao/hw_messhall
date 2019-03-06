@@ -38,7 +38,7 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/cartQuery',
+            'http://localhost:8080/cartQuery',
             init
         )
             .then(res => res.json())
@@ -82,7 +82,7 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/cartModify',
+            'http://localhost:8080/cartModify',
             init
         )
             .then(res => res.json())
@@ -122,7 +122,7 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/cartDel',
+            'http://localhost:8080/cartDel',
             init
         )
             .then(res => res.json())
@@ -314,7 +314,7 @@ class MyCart extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/orderAdd',
+            'http://localhost:8080/orderAdd',
             init
         )
             .then(res => res.json())

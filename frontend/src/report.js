@@ -147,7 +147,7 @@ class Report extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/orderStatistic',
+            'http://localhost:8080/orderStatistic',
             init
         )
             .then(res => res.json())

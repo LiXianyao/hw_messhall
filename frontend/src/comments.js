@@ -41,7 +41,7 @@ class Comments extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/commentAdd',
+            'http://localhost:8080/commentAdd',
             init
         )
             .then(res => res.json())
@@ -92,7 +92,7 @@ class Comments extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/commentDelete',
+            'http://localhost:8080/commentDelete',
             init
         )
             .then(res => res.json())
@@ -140,7 +140,7 @@ class Comments extends React.Component {
         }
 
         fetch(
-            'http://10.108.113.251:8080/commentQuery',
+            'http://localhost:8080/commentQuery',
             init
         )
             .then(res => res.json())
