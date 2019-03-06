@@ -3,6 +3,8 @@ package edu.graduate.messhall.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import lombok.Data;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -15,21 +17,20 @@ import java.util.List;
 @Data
 public class TblOrder {
     @Id //是主键
-    @GenericGenerator(strategy = "uuid", name = "orderId")
-    @GeneratedValue(generator = "orderId")
-    @Column(nullable = false , length = 100, columnDefinition = "无意义uuid主键")
-    public String orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false , length = 11, columnDefinition = "无意义自增主键")
+    public int orderId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
     @Column(nullable = false , insertable = false, updatable = false, columnDefinition = "订单生成时间")
+    @Generated(GenerationTime.INSERT)
     public Date time;
 
     @Column(nullable = false , length = 11, columnDefinition = "价格")
-    public int price;
+    private double price;
 
     @Column(nullable = false , length = 100, columnDefinition = "手机号码")
-    public String phone;
+    private String phone;
 
     @Column(nullable = false , length = 20, columnDefinition = "订单状态")
     public String state;
@@ -41,7 +42,7 @@ public class TblOrder {
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "businessId",foreignKey = @ForeignKey(name = "tblorder_tbluser_userId_fk_2"))
     @JsonIgnore
-    public TblUser business;
+    private TblUser business;
 
     @Column(insertable = false, updatable = false, nullable = false , length = 11, columnDefinition = "卖家Id")
     private int businessId;
@@ -63,7 +64,7 @@ public class TblOrder {
     public TblOrder(){
     }
 
-    public TblOrder(TblUser business, TblUser customer, int price, String content){
+    public TblOrder(TblUser business, TblUser customer, double price, String content){
         this.business = business;
         this.customer = customer;
         this.price = price;

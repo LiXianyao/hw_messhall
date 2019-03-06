@@ -42,6 +42,7 @@ public class infoController {
                 response = new infoResponse(true,"用户信息修改成功");
             }
             catch (Exception e){
+                log.error(e.getMessage());
                 response = new infoResponse(false,"数据保存异常，修改失败，请重试或联系管理员检查数据库");
             }
         }

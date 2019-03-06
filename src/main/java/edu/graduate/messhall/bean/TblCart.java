@@ -17,13 +17,13 @@ public class TblCart{
 
     /*多对一映射，一个用户会有多条购物车记录*/
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId",foreignKey = @ForeignKey(name = "tblCart_tbluser_userId_fk"))
+    @JoinColumn(name = "userId",nullable = false, foreignKey = @ForeignKey(name = "tblCart_tbluser_userId_fk"))
     @JsonIgnore
     private TblUser user;
 
     /*多对一映射，一个用户会点多钟菜*/
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "foodId",foreignKey = @ForeignKey(name = "tblCart_tblfood_foodId_fk"))
+    @JoinColumn(name = "foodId",nullable = false, foreignKey = @ForeignKey(name = "tblCart_tblfood_foodId_fk"))
     @JsonIgnore
     public TblFood food;
 
@@ -41,7 +41,7 @@ public class TblCart{
     @Transient
     static private boolean checked = false;
     @Transient
-    private int foodPrice;
+    private double foodPrice;
     @Transient
     private String foodName;
 
@@ -63,9 +63,10 @@ public class TblCart{
     }
 
     public void setCartInfo(){
+        this.getFood().setFoodInfo();
         this.setFoodName(this.getFood().getFoodName());
         this.setFoodPrice(this.getFood().getFoodPrice());
-        this.setBelongName(this.getUser().getUserName());
+        this.setBelongName(this.getFood().getBelongName());
     }
 }
 

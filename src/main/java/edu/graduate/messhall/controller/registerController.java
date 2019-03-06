@@ -1,7 +1,6 @@
 package edu.graduate.messhall.controller;
 
 import edu.graduate.messhall.bean.*;
-import edu.graduate.messhall.filter.loginFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,7 @@ public class registerController {
                 response = new registerResponse(true,"注册成功，可以使用已注册的账号进行登录");
             }
             catch (Exception e){
+                log.error(e.getMessage());
                 response = new registerResponse(false,"数据保存异常，注册失败，请重试或联系管理员检查数据库");
             }
         }
