@@ -2,6 +2,7 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { Link } from 'react-router-dom'
 import {withRouter} from 'react-router'
 import React from 'react';
+import cookie from 'react-cookies'
 import './index.css'
 
 class NormalLoginForm extends React.Component {
@@ -80,8 +81,9 @@ class NormalLoginForm extends React.Component {
                     var mstr = data["message"];
                     if (rstate) {
                         console.log("login succeed!");
-                        var path = "/food/" + data["userType"] + "/" + data["userId"]
-                        this.props.history.push(path)
+                        cookie.save("userType",data["userType"],{ path: '/' });
+                        cookie.save("userId",data["userId"],{ path: '/' });
+                        this.props.history.push({ pathname: "/food", state: { userType:data["userType"], userId:data["userId"] } })
                     }
                     else {
                         alert(mstr)

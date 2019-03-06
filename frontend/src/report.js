@@ -6,6 +6,7 @@ import TemplatePage from './template'
 import moment from 'moment'
 import ReactDOM from 'react-dom';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import cookie from 'react-cookies'
 import "./index.css"
 
 const { RangePicker } = DatePicker;
@@ -14,8 +15,8 @@ class Report extends React.Component {
     constructor(props) {
       super(props);
       // 设置 initial state
-      this.userType = this.props.match.params.type
-      this.userId = this.props.match.params.id
+      this.userType = cookie.load("userType")
+      this.userId = cookie.load("userId")
       this.siderValue = ["report"]
       this.state = {
           startDate:moment().utcOffset(8).format("YYYY-MM-DDTHH:mm:ss"),
@@ -152,7 +153,6 @@ class Report extends React.Component {
             .then(res => res.json())
             .then(data => {
                 if(data["loginRequired"] == -1){
-                  alert("请先登录")
                   this.props.history.push("/login")
                 }
                 if(flag){
@@ -166,12 +166,13 @@ class Report extends React.Component {
                       if(foodSale[food.foodName] >= 1){
                         foodSale[food.foodName] = foodSale[food.foodName] + food.foodNum;
                       }else{
-                        foodSale[food.foodName] = 1;
+                        foodSale[food.foodName] = food.foodNum;
                       }
                     })
                     ele.content = foodStr;
                     ele.time = moment(ele.time).utcOffset(0).format("YYYY-MM-DD HH:mm:ss");
                     sum = sum + ele.price;
+                    ele.price = ele.price.toFixed(2);
                   })
                   var sortFood = Object.keys(foodSale).sort(function(a,b){ return foodSale[b]-foodSale[a]; })
                   console.log(sortFood);
@@ -180,7 +181,7 @@ class Report extends React.Component {
                     data:data,
                     sortFood:sortFood,
                     foodSale:foodSale,
-                    sum:sum
+                    sum:sum.toFixed(2)
                   })
                 }
 
@@ -190,6 +191,10 @@ class Report extends React.Component {
 
     componentWillMount()
     {
+      if(this.userId == undefined){
+        alert("请先登录")
+        this.props.history.push("/login")
+      }
       this.getOrder(0);
     } 
   

@@ -1,6 +1,7 @@
 import {List,Input,Button} from 'antd';
 import {withRouter} from 'react-router'
 import React from 'react';
+import cookie from 'react-cookies'
 import TemplatePage from './template'
 
 const { TextArea } = Input;
@@ -10,8 +11,8 @@ const defaultData = [];
 class Comments extends React.Component {
     constructor(props) {
         super(props);
-        this.userType = this.props.match.params.type
-        this.userId = this.props.match.params.id
+        this.userType = cookie.load("userType")
+        this.userId = cookie.load("userId")
         this.siderValue = ["comments"]
         this.state = {
             data:defaultData,
@@ -145,7 +146,6 @@ class Comments extends React.Component {
             .then(res => res.json())
             .then(data => {
                 if(data["loginRequired"] == -1){
-                    alert("请先登录")
                     this.props.history.push("/login")
                 }
                 console.log(data);
@@ -159,6 +159,10 @@ class Comments extends React.Component {
     }
 
     componentWillMount(){
+        if(this.userId == undefined){
+            alert("请先登录")
+            this.props.history.push("/login")
+        }
         this.getAllComments();
     }
 

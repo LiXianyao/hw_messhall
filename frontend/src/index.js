@@ -30,12 +30,12 @@ ReactDOM.render(
           )}/>
           <Route path='/login' component={WrappedNormalLoginForm} />
           <Route path='/register' component={WrappedNormalRegisterForm} />
-          <Route path='/food/:type/:id' component={Food} />
-          <Route path='/order/:type/:id' component={Order} />
-          <Route path='/comments/:type/:id' component={Comments} />
-          <Route path='/info/:type/:id' component={InfoForm} />
-          <Route path='/cart/:type/:id' component={MyCart} />
-          <Route path='/report/:type/:id' component={Report} />
+          <Route path='/food' component={Food} />
+          <Route path='/order' component={Order} />
+          <Route path='/comments' component={Comments} />
+          <Route path='/info' component={InfoForm} />
+          <Route path='/cart' component={MyCart} />
+          <Route path='/report' component={Report} />
         </Switch>
         </LocaleProvider>
       </div>
